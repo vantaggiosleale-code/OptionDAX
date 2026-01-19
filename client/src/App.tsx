@@ -1,50 +1,63 @@
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
-import ErrorBoundary from "./components/ErrorBoundary";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
-import Dashboard from "./pages/Dashboard";
-import Strategies from "./pages/Strategies";
-import Portfolios from "./pages/Portfolios";
-import Analysis from "./pages/Analysis";
 
-function Router() {
-  // make sure to consider if you need authentication for certain routes
-  return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/dashboard"} component={Dashboard} />
-      <Route path={"/strategies"} component={Strategies} />
-      <Route path={"/portfolios"} component={Portfolios} />
-      <Route path={"/analysis"} component={Analysis} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
+import React from 'react';
+import usePortfolioStore from './store/portfolioStore';
+import StructureListView from './components/StructureListView';
+import StructureDetailView from './components/StructureDetailView';
+import SettingsView from './components/SettingsView';
+import PortfolioAnalysis from './components/PortfolioAnalysis';
+import { SettingsIcon, ChartBarIcon } from './components/icons';
 
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
+const App: React.FC = () => {
+    const { currentView, currentStructureId, setCurrentView } = usePortfolioStore();
 
-function App() {
-  return (
-    <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="dark"
-        // switchable
-      >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
-  );
-}
+    const renderView = () => {
+        switch (currentView) {
+            case 'list':
+                return <StructureListView />;
+            case 'detail':
+                return <StructureDetailView structureId={currentStructureId} />;
+            case 'settings':
+                return <SettingsView />;
+            case 'analysis':
+                return <PortfolioAnalysis />;
+            default:
+                return <StructureListView />;
+        }
+    }
+
+    return (
+        <div className="bg-gray-900 text-gray-200 font-sans min-h-screen flex flex-col">
+            <header className="bg-gray-800/50 backdrop-blur-sm border-b border-gray-700 p-3 flex items-center justify-between sticky top-0 z-10">
+                <div 
+                    className="flex items-center space-x-2 cursor-pointer"
+                    onClick={() => setCurrentView('list')}
+                >
+                    <div className="w-8 h-8 bg-accent rounded-md flex items-center justify-center font-bold text-xl">O</div>
+                    <h1 className="text-xl font-bold text-white">Option DAX</h1>
+                </div>
+                 <div className="flex items-center space-x-2">
+                    <button 
+                        onClick={() => setCurrentView('analysis')} 
+                        className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-gray-700 transition"
+                        title="Analisi Portafoglio"
+                    >
+                        <ChartBarIcon />
+                    </button>
+                    <button 
+                        onClick={() => setCurrentView('settings')} 
+                        className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-gray-700 transition"
+                        title="Impostazioni"
+                    >
+                        <SettingsIcon />
+                    </button>
+                </div>
+            </header>
+            <main className="flex-1 p-2 sm:p-4">
+                {renderView()}
+            </main>
+            <div id="modal-root"></div>
+        </div>
+    );
+};
 
 export default App;
