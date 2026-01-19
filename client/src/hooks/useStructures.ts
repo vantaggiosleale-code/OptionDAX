@@ -7,7 +7,7 @@ import { Structure, OptionLeg } from '../types';
  */
 export function useStructures() {
   // Query per ottenere tutte le strutture (active + closed)
-  const structuresQuery = trpc.optionStructures.list.useQuery();
+  const structuresQuery = trpc.optionStructures.list.useQuery({ status: 'all' });
   
   // Mutations
   const createMutation = trpc.optionStructures.create.useMutation();

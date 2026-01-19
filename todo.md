@@ -115,3 +115,8 @@
 - [x] Aggiornare tutti i componenti (StructureListView, StructureDetailView, PortfolioAnalysis, ImageAnalysisModal, HistoricalImportModal, SettingsView, App.tsx)
 - [x] Testare caricamento strutture da database vuoto
 - [ ] Aggiungere dropdown condivisione nelle card strutture
+
+## Bug Fix - Caricamento Infinito (COMPLETATO)
+- [x] Correggere useStructures: aggiungere parametro { status: 'all' } alla query tRPC
+- [x] Testare caricamento app dopo fix
+- [x] Verificare che le strutture vengano caricate correttamente
