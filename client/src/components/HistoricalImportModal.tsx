@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { HistoricalImportData } from '../types';
-import { analyzeHistoryImage } from '../services/geminiService';
+// import { analyzeHistoryImage } from '../services/geminiService'; // TODO: Implement with tRPC
 import usePortfolioStore from '../store/portfolioStore';
 
 interface HistoricalImportModalProps {
@@ -74,9 +74,10 @@ const HistoricalImportModal: React.FC<HistoricalImportModalProps> = ({ isOpen, o
             const file = files[i];
             setProgress({ current: i + 1, total: files.length });
             try {
-                const { data, mimeType } = await fileToDataUrl(file);
-                const tradeData = await analyzeHistoryImage(data, mimeType);
-                results.push(tradeData);
+                // const { data, mimeType } = await fileToDataUrl(file);
+                // const tradeData = await analyzeHistoryImage(data, mimeType);
+                // results.push(tradeData);
+                throw new Error('Funzionalità temporaneamente disabilitata. Sarà disponibile dopo l\'implementazione dell\'autenticazione.');
             } catch (err: any) {
                 setError(`Errore durante l'analisi del file ${file.name}: ${err.message}. L'importazione è stata interrotta.`);
                 setIsLoading(false);

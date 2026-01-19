@@ -74,3 +74,10 @@
 - [ ] Verificare tutte le variabili d'ambiente
 - [ ] Testare app in preview mode
 - [ ] Documentare funzionalità per l'utente
+
+## Fix Gemini API Error (URGENT)
+- [x] Rimuovere geminiService.ts dal frontend
+- [x] Usare server/_core/llm.ts per chiamate Gemini nel backend
+- [x] Creare router tRPC chat.sendMessage per AI
+- [x] Aggiornare ImageAnalysisModal e HistoricalImportModal
+- [x] Testare funzionamento app senza errori Gemini

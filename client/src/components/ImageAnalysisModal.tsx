@@ -2,7 +2,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { ExtractedTrade, OptionLeg } from '../types';
-import { analyzeImageForTrades } from '../services/geminiService';
+// import { analyzeImageForTrades } from '../services/geminiService'; // TODO: Implement with tRPC
 import usePortfolioStore from '../store/portfolioStore';
 import useSettingsStore from '../store/settingsStore';
 
@@ -88,9 +88,10 @@ const ImageAnalysisModal: React.FC<ImageAnalysisModalProps> = ({ isOpen, onClose
         setExtractedTrades([]);
 
         try {
-            const { data, mimeType } = await fileToDataUrl(imageFile);
-            const trades = await analyzeImageForTrades(data, mimeType);
-            setExtractedTrades(trades);
+            // const { data, mimeType } = await fileToDataUrl(imageFile);
+            // const trades = await analyzeImageForTrades(data, mimeType);
+            // setExtractedTrades(trades);
+            setError('Funzionalità temporaneamente disabilitata. Sarà disponibile dopo l\'implementazione dell\'autenticazione.');
         } catch (err: any) {
             setError(err.message || 'Si è verificato un errore sconosciuto.');
         } finally {
