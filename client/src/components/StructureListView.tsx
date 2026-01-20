@@ -49,15 +49,24 @@ const calculateUnrealizedPnlForStructure = (structure: Structure, marketData: Ma
     }
 
     const totalNetPnl = structure.legs.reduce((acc, leg) => {
-        const timeToExpiry = getTimeToExpiry(leg.expiryDate);
+        // Check if leg has manual closing price
+        const hasManualClosingPrice = leg.closingPrice !== null && leg.closingPrice !== undefined;
+        
         let currentPrice = 0;
-        if (timeToExpiry > 0) {
-            const bs = new BlackScholes(marketData.daxSpot, leg.strike, timeToExpiry, marketData.riskFreeRate, leg.impliedVolatility);
-            currentPrice = leg.optionType === 'Call' ? bs.callPrice() : bs.putPrice();
+        if (hasManualClosingPrice) {
+            // Use manual closing price if present
+            currentPrice = leg.closingPrice!;
         } else {
-            currentPrice = leg.optionType === 'Call'
-                ? Math.max(0, marketData.daxSpot - leg.strike)
-                : Math.max(0, leg.strike - marketData.daxSpot);
+            // Calculate theoretical price with Black-Scholes
+            const timeToExpiry = getTimeToExpiry(leg.expiryDate);
+            if (timeToExpiry > 0) {
+                const bs = new BlackScholes(marketData.daxSpot, leg.strike, timeToExpiry, marketData.riskFreeRate, leg.impliedVolatility);
+                currentPrice = leg.optionType === 'Call' ? bs.callPrice() : bs.putPrice();
+            } else {
+                currentPrice = leg.optionType === 'Call'
+                    ? Math.max(0, marketData.daxSpot - leg.strike)
+                    : Math.max(0, leg.strike - marketData.daxSpot);
+            }
         }
 
         let pnlPoints = 0;

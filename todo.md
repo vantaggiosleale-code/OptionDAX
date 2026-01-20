@@ -253,3 +253,4 @@
 - [x] BUG CRITICO: Modificare prezzo apertura/chiusura su una gamba modifica TUTTE le altre gambe - RISOLTO: generazione ID univoci con timestamp+random
 - [x] BUG CRITICO: Prezzi di chiusura non vengono salvati quando si clicca "Salva Modifiche" - RISOLTO: aggiunto closingPrice e closingDate al mapping legs
 - [x] 🔥 BUG GRAVISSIMO: Procedura close SOVRASCRIVE prezzi di chiusura manuali con calcolo Black-Scholes teorico - RISOLTO: usa closingPrice manuale se presente, altrimenti teorico
+- [x] 🔴 BUG CRITICO: Strutture ATTIVE non usano prezzi di chiusura manuali per calcolare P&L - RISOLTO: usa closingPrice manuale se presente, altrimenti Black-Scholes teorico
