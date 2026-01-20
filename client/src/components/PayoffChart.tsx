@@ -85,11 +85,27 @@ const PayoffChart: React.FC<PayoffChartProps> = ({ legs, marketData, multiplier 
         const currentSpot = marketData.daxSpot;
         let pnlAtExpiryPoints = 0;
         let pnlTodayPoints = 0;
+        
+        // Calculate realized P&L from closed legs as fixed offset
+        let realizedPnlOffset = 0;
 
         legs.forEach((leg: OptionLeg) => {
-            // Skip closed legs (legs with closing price set)
             const isClosed = leg.closingPrice !== null && leg.closingPrice !== undefined;
-            if (isClosed) return;
+            
+            if (isClosed) {
+                // For closed legs, add realized P&L as fixed offset
+                let pnlPoints = 0;
+                if (leg.quantity > 0) { // Long
+                    pnlPoints = (leg.closingPrice! - leg.tradePrice) * leg.quantity;
+                } else { // Short
+                    pnlPoints = (leg.tradePrice - leg.closingPrice!) * Math.abs(leg.quantity);
+                }
+                // Convert to euro and subtract commissions (assuming default 2€ per leg)
+                const grossPnl = pnlPoints * multiplier;
+                const commissions = 4 * Math.abs(leg.quantity); // opening + closing commission
+                realizedPnlOffset += (grossPnl - commissions);
+                return; // Skip rest of calculation for closed legs
+            }
 
             const expiryValue = leg.optionType === 'Call'
                 ? Math.max(0, currentSpot - leg.strike)
@@ -121,8 +137,8 @@ const PayoffChart: React.FC<PayoffChartProps> = ({ legs, marketData, multiplier 
         });
 
         return {
-            expiry: [{ x: currentSpot, y: pnlAtExpiryPoints * multiplier }],
-            today: [{ x: currentSpot, y: pnlTodayPoints * multiplier }]
+            expiry: [{ x: currentSpot, y: pnlAtExpiryPoints * multiplier + realizedPnlOffset }],
+            today: [{ x: currentSpot, y: pnlTodayPoints * multiplier + realizedPnlOffset }]
         };
     }, [legs, marketData, multiplier]);
 
@@ -133,6 +149,23 @@ const PayoffChart: React.FC<PayoffChartProps> = ({ legs, marketData, multiplier 
         const steps = 200;
         const stepSize = (maxPrice - minPrice) / steps;
         
+        // Calculate realized P&L from closed legs as fixed offset
+        let realizedPnlOffset = 0;
+        legs.forEach((leg: OptionLeg) => {
+            const isClosed = leg.closingPrice !== null && leg.closingPrice !== undefined;
+            if (isClosed) {
+                let pnlPoints = 0;
+                if (leg.quantity > 0) { // Long
+                    pnlPoints = (leg.closingPrice! - leg.tradePrice) * leg.quantity;
+                } else { // Short
+                    pnlPoints = (leg.tradePrice - leg.closingPrice!) * Math.abs(leg.quantity);
+                }
+                const grossPnl = pnlPoints * multiplier;
+                const commissions = 4 * Math.abs(leg.quantity);
+                realizedPnlOffset += (grossPnl - commissions);
+            }
+        });
+        
         const data = [];
 
         for (let i = 0; i <= steps; i++) {
@@ -141,9 +174,8 @@ const PayoffChart: React.FC<PayoffChartProps> = ({ legs, marketData, multiplier 
         let pnlTodayPoints = 0;
 
         legs.forEach((leg: OptionLeg) => {
-            // Skip closed legs (legs with closing price set)
             const isClosed = leg.closingPrice !== null && leg.closingPrice !== undefined;
-            if (isClosed) return;
+            if (isClosed) return; // Skip closed legs in curve calculation
 
             const expiryValue = leg.optionType === 'Call'
                 ? Math.max(0, currentSpot - leg.strike)
@@ -177,8 +209,8 @@ const PayoffChart: React.FC<PayoffChartProps> = ({ legs, marketData, multiplier 
         
         data.push({ 
             spot: currentSpot, 
-            pnlAtExpiry: pnlAtExpiryPoints * multiplier,
-            pnlToday: pnlTodayPoints * multiplier 
+            pnlAtExpiry: pnlAtExpiryPoints * multiplier + realizedPnlOffset,
+            pnlToday: pnlTodayPoints * multiplier + realizedPnlOffset
             }); 
         }
         return data;

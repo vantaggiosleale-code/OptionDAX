@@ -255,4 +255,4 @@
 - [x] 🔥 BUG GRAVISSIMO: Procedura close SOVRASCRIVE prezzi di chiusura manuali con calcolo Black-Scholes teorico - RISOLTO: usa closingPrice manuale se presente, altrimenti teorico
 - [x] 🔴 BUG CRITICO: Strutture ATTIVE non usano prezzi di chiusura manuali per calcolare P&L - RISOLTO: usa closingPrice manuale se presente, altrimenti Black-Scholes teorico
 
-- [x] 🔴 BUG CRITICO GRAFICO PAYOFF: Long Strangle (Long Put + Long Call) mostra payoff invertito come Short Call - RISOLTO: PayoffChart ora filtra gambe chiuse (con closingPrice impostato) dal calcolo payoff
+- [x] 🔴 BUG CRITICO GRAFICO PAYOFF: Gambe chiuse devono contribuire con P&L realizzato come offset fisso al payoff totale - RISOLTO: calcola P&L realizzato gambe chiuse e lo aggiunge come offset fisso al payoff delle gambe aperte
