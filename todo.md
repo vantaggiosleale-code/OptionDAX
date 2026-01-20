@@ -225,3 +225,7 @@
 
 ## Bug Pulsante Chiudi Struttura (RISOLTO)
 - [x] BUG: Pulsante "Chiudi Struttura" non funziona in StructureDetailView - implementata procedure close nel router
+
+## Bug Critici (RISOLTO)
+- [x] BUG: Math.erf is not a function - implementata approssimazione CDF normale (Abramowitz & Stegun)
+- [x] BUG: Strutture condivise tra tutti gli utenti - fixato filtro per mostrare solo strutture dell'utente corrente

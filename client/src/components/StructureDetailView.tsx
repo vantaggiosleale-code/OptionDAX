@@ -238,8 +238,13 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
     
     const handleClose = async () => {
         if (!localStructure || !('id' in localStructure) || isReadOnly) return;
-        await closeStructure(localStructure.id, marketData.daxSpot, marketData.riskFreeRate);
-        setCurrentView('list');
+        try {
+            await closeStructure(localStructure.id, marketData.daxSpot, marketData.riskFreeRate);
+            setCurrentView('list');
+        } catch (error) {
+            console.error('Errore durante la chiusura:', error);
+            alert(`Errore durante la chiusura: ${error}`);
+        }
     };
 
     const handleDelete = () => {

@@ -27,32 +27,8 @@ export const optionStructuresRouter = router({
       const currentUser = ctx.user;
       const isAdmin = currentUser.role === 'admin';
 
-      // Get all admin user IDs
-      const adminUsers = await db
-        .select({ id: users.id })
-        .from(users)
-        .where(eq(users.role, 'admin'));
-      const adminIds = adminUsers.map(u => u.id);
-
-      let query = db.select().from(structures);
-
-      if (isAdmin) {
-        // Admin vede: proprie + altri admin
-        query = query.where(
-          or(
-            eq(structures.userId, currentUser.id),
-            inArray(structures.userId, adminIds)
-          )
-        );
-      } else {
-        // User vede: proprie + admin
-        query = query.where(
-          or(
-            eq(structures.userId, currentUser.id),
-            inArray(structures.userId, adminIds)
-          )
-        );
-      }
+      // Base query - show only structures owned by current user
+      let query = db.select().from(structures).where(eq(structures.userId, currentUser.id));
 
       // Filter by status
       if (input.status !== 'all') {
@@ -438,7 +414,14 @@ export const optionStructuresRouter = router({
         const timeToExpiry = (new Date(leg.expiryDate).getTime() - Date.now()) / (365.25 * 24 * 60 * 60 * 1000);
         const d1 = (Math.log(input.daxSpot / leg.strike) + (input.riskFreeRate + 0.5 * leg.impliedVolatility ** 2) * timeToExpiry) / (leg.impliedVolatility * Math.sqrt(timeToExpiry));
         const d2 = d1 - leg.impliedVolatility * Math.sqrt(timeToExpiry);
-        const normCdf = (x: number) => 0.5 * (1 + Math.erf(x / Math.sqrt(2)));
+        
+        // Approssimazione della CDF normale standard (Abramowitz & Stegun)
+        const normCdf = (x: number) => {
+          const t = 1 / (1 + 0.2316419 * Math.abs(x));
+          const d = 0.3989423 * Math.exp(-x * x / 2);
+          const prob = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+          return x > 0 ? 1 - prob : prob;
+        };
         
         let theoreticalPrice;
         if (leg.optionType === 'call') {
