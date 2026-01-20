@@ -198,3 +198,18 @@
 - [x] Pulita cache di Vite per forzare reload del codice
 - [ ] Ricreare router optionStructures da zero copiando struttura da router funzionante
 - [ ] Testare che le nuove strutture vengano salvate e ricaricate
+
+## Ricreazione Router optionStructures (IN CORSO)
+- [ ] Backup del router optionStructures esistente
+- [ ] Creare nuovo router optionStructures copiando struttura da router funzionante
+- [ ] Implementare procedure list con schema input corretto
+- [ ] Implementare procedure create con schema input corretto
+- [ ] Implementare procedure update, delete, share, unshare, getAdmins
+- [ ] Testare che il nuovo router funzioni senza errori 400
+
+## Sistema Condivisione Strutture (TODO)
+- [ ] Creare componente ShareDropdown per selezionare admin
+- [ ] Integrare ShareDropdown nelle card strutture in StructureListView
+- [ ] Implementare logica condivisione con chiamata tRPC share
+- [ ] Implementare logica rimozione condivisione con chiamata tRPC unshare
+- [ ] Testare condivisione tra utenti e admin end-to-end

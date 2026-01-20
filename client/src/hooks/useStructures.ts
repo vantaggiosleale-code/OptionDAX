@@ -28,6 +28,7 @@ export function useStructures() {
       await createMutation.mutateAsync({
         tag: structure.tag,
         multiplier: structure.multiplier,
+        legsPerContract: 2,
         legs: structure.legs.map(leg => ({
           optionType: leg.optionType,
           strike: leg.strike,

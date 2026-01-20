@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { OptionLeg, MarketData, Structure, CalculatedGreeks } from '../types';
 import { BlackScholes, getTimeToExpiry, calculateImpliedVolatility } from '../services/blackScholes';
 import { useStructures } from '../hooks/useStructures';
+import { trpc } from '../lib/trpc';
 import useSettingsStore from '../store/settingsStore';
 import { useMarketDataStore } from '../stores/marketDataStore';
 import PayoffChart from './PayoffChart';
@@ -31,6 +32,8 @@ interface StructureDetailViewProps {
 
 const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, setCurrentView }) => {
     const { structures, addStructure, updateStructure, deleteStructure, closeStructure, reopenStructure } = useStructures();
+    const utils = trpc.useUtils();
+    const createMutation = trpc.optionStructures.create.useMutation();
     
     // Ref per input uncontrolled
     const tagInputRef = useRef<HTMLInputElement>(null);
@@ -192,19 +195,45 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
         setLocalStructure({ ...localStructure, legs: updatedLegs });
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (!localStructure || isReadOnly) return;
         
         // Leggi valore da input uncontrolled
         const tagValue = tagInputRef.current?.value || '';
         const structureToSave = { ...localStructure, tag: tagValue };
         
-        if ('id' in structureToSave) {
-            updateStructure(structureToSave as Structure);
-        } else {
-            addStructure(structureToSave);
+        try {
+            if ('id' in structureToSave) {
+                await updateStructure(structureToSave as Structure);
+            } else {
+                // Usa direttamente la mutation tRPC invece di addStructure
+                const mappedLegs = structureToSave.legs.map(leg => ({
+                    optionType: leg.optionType,
+                    strike: leg.strike,
+                    expiryDate: leg.expiryDate,
+                    openingDate: leg.openingDate,
+                    quantity: leg.quantity,
+                    tradePrice: leg.tradePrice,
+                    impliedVolatility: leg.impliedVolatility,
+                    openingCommission: leg.openingCommission || 2,
+                    closingCommission: leg.closingCommission || 2,
+                }));
+                
+                await createMutation.mutateAsync({
+                    tag: structureToSave.tag,
+                    multiplier: structureToSave.multiplier,
+                    legsPerContract: 2,
+                    legs: mappedLegs,
+                });
+                
+                // Invalida la query per aggiornare la lista
+                utils.optionStructures.list.invalidate();
+            }
+            setCurrentView('list');
+        } catch (error) {
+            console.error('Errore durante il salvataggio:', error);
+            alert(`Errore durante il salvataggio: ${error}`);
         }
-        setCurrentView('list');
     };
     
     const handleClose = async () => {
