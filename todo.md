@@ -256,3 +256,13 @@
 - [x] 🔴 BUG CRITICO: Strutture ATTIVE non usano prezzi di chiusura manuali per calcolare P&L - RISOLTO: usa closingPrice manuale se presente, altrimenti Black-Scholes teorico
 
 - [x] 🔴 BUG CRITICO GRAFICO PAYOFF: Gambe chiuse devono contribuire con P&L realizzato come offset fisso al payoff totale - RISOLTO: calcola P&L realizzato gambe chiuse e lo aggiunge come offset fisso al payoff delle gambe aperte
+
+## 🎯 Feature: Sistema Multi-Utente con Gestione Admin
+
+- [x] Aggiornare schema database con campi isPublic, isTemplate, originalStructureId
+- [x] Implementare procedure tRPC: listPublic, import, togglePublic
+- [x] Creare sezione "Strutture Pubbliche" nella home (pulsante 🌐 Pubbliche nella header)
+- [x] Aggiungere pulsante "Importa" su strutture pubbliche
+- [x] Aggiungere toggle "Pubblica/Privata" per admin nelle strutture
+- [ ] Filtrare lista strutture per mostrare solo proprie + pubbliche
+- [ ] Testare flusso: admin pubblica → utente importa → modifica copia indipendente

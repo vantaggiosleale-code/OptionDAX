@@ -160,6 +160,11 @@ export const structures = mysqlTable("structures", {
   // Sharing with admins
   sharedWith: text("sharedWith"), // JSON array of admin user IDs, e.g., "[1, 3, 5]"
   
+  // Public visibility and templates
+  isPublic: int("isPublic").default(0).notNull(), // 0 = private, 1 = public (visible to all users)
+  isTemplate: int("isTemplate").default(0).notNull(), // 0 = normal structure, 1 = template/model structure
+  originalStructureId: int("originalStructureId"), // Reference to original structure if this is an imported copy
+  
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

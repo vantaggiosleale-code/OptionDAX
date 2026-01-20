@@ -65,7 +65,7 @@ const MetricCard = ({ icon, title, value, colorClass = 'text-white' }: { icon: R
 );
 
 interface PortfolioAnalysisProps {
-    setCurrentView: (view: string) => void;
+    setCurrentView: (view: 'list' | 'detail' | 'settings' | 'analysis' | 'public', structureId?: number | 'new' | null) => void;
 }
 
 const PortfolioAnalysis: React.FC<PortfolioAnalysisProps> = ({ setCurrentView }) => {

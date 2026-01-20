@@ -4,7 +4,7 @@ import useSettingsStore from '../store/settingsStore';
 import { Settings } from '../types';
 
 interface SettingsViewProps {
-    setCurrentView: (view: string) => void;
+    setCurrentView: (view: 'list' | 'detail' | 'settings' | 'analysis' | 'public', structureId?: number | 'new' | null) => void;
 }
 
 const SettingsView: React.FC<SettingsViewProps> = ({ setCurrentView }) => {

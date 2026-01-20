@@ -8,13 +8,14 @@ import StructureListView from './components/StructureListView';
 import StructureDetailView from './components/StructureDetailView';
 import SettingsView from './components/SettingsView';
 import PortfolioAnalysis from './components/PortfolioAnalysis';
+import PublicStructuresView from './components/PublicStructuresView';
 import { SettingsIcon, ChartBarIcon } from './components/icons';
 
 const App: React.FC = () => {
-    const [currentView, setCurrentView] = React.useState<'list' | 'detail' | 'settings' | 'analysis'>('list');
+    const [currentView, setCurrentView] = React.useState<'list' | 'detail' | 'settings' | 'analysis' | 'public'>('list');
     const [currentStructureId, setCurrentStructureId] = React.useState<number | 'new' | null>(null);
     
-    const handleSetCurrentView = (view: 'list' | 'detail' | 'settings' | 'analysis', structureId?: number | 'new' | null) => {
+    const handleSetCurrentView = (view: 'list' | 'detail' | 'settings' | 'analysis' | 'public', structureId?: number | 'new' | null) => {
         setCurrentView(view);
         if (structureId !== undefined) {
             setCurrentStructureId(structureId);
@@ -37,6 +38,8 @@ const App: React.FC = () => {
                 return <SettingsView setCurrentView={handleSetCurrentView} />;
             case 'analysis':
                 return <PortfolioAnalysis setCurrentView={handleSetCurrentView} />;
+            case 'public':
+                return <PublicStructuresView setCurrentView={handleSetCurrentView} />;
             default:
                 return <StructureListView setCurrentView={handleSetCurrentView} />;
         }
@@ -55,6 +58,13 @@ const App: React.FC = () => {
                  <div className="flex items-center space-x-2">
                     {isAuthenticated && (
                         <>
+                            <button 
+                                onClick={() => handleSetCurrentView('public')} 
+                                className="text-gray-400 hover:text-white px-3 py-2 rounded-lg hover:bg-gray-700 transition text-sm"
+                                title="Strutture Pubbliche"
+                            >
+                                🌐 Pubbliche
+                            </button>
                             <button 
                                 onClick={() => handleSetCurrentView('analysis')} 
                                 className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-gray-700 transition"

@@ -26,6 +26,9 @@ export interface Structure {
     multiplier: number; // Product multiplier (e.g., 1=CFD, 5=Micro Future, 25=Future)
     closingDate?: string;
     realizedPnl?: number;
+    isPublic?: number; // 0 = private, 1 = public
+    isTemplate?: number; // 0 = normal, 1 = template
+    originalStructureId?: number; // Reference to original if imported
 }
 
 export interface CalculatedGreeks {

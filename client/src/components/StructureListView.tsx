@@ -89,7 +89,7 @@ const calculateUnrealizedPnlForStructure = (structure: Structure, marketData: Ma
 
 
 interface StructureListViewProps {
-    setCurrentView: (view: 'list' | 'detail' | 'settings' | 'analysis', structureId?: number | 'new' | null) => void;
+    setCurrentView: (view: 'list' | 'detail' | 'settings' | 'analysis' | 'public', structureId?: number | 'new' | null) => void;
 }
 
 const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView }) => {

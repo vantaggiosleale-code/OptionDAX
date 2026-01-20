@@ -11,6 +11,8 @@ import { PlusIcon, TrashIcon, CalculatorIcon, CloudDownloadIcon } from './icons'
 import ExpiryDateSelector, { findThirdFridayOfMonth } from './ExpiryDateSelector';
 import QuantitySelector from './QuantitySelector';
 import StrikeSelector from './StrikeSelector';
+import { useAuth } from '../_core/hooks/useAuth';
+import { toast } from 'sonner';
 
 const CheckCircleIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -27,13 +29,14 @@ const ReopenIcon = () => (
 
 interface StructureDetailViewProps {
     structureId: number | 'new' | null;
-    setCurrentView: (view: 'list' | 'detail' | 'settings' | 'analysis', structureId?: number | 'new' | null) => void;
+    setCurrentView: (view: 'list' | 'detail' | 'settings' | 'analysis' | 'public', structureId?: number | 'new' | null) => void;
 }
 
 const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, setCurrentView }) => {
     const { structures, addStructure, updateStructure, deleteStructure, closeStructure, reopenStructure } = useStructures();
     const utils = trpc.useUtils();
     const createMutation = trpc.optionStructures.create.useMutation();
+    const { user } = useAuth();
     
     // Ref per input uncontrolled
     const tagInputRef = useRef<HTMLInputElement>(null);
@@ -479,6 +482,39 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
                             </select>
                         </div>
                     </div>
+                    
+                    {/* Admin Toggle Public/Private */}
+                    {user?.role === 'admin' && 'id' in localStructure && (
+                        <div className="bg-gray-700 p-3 rounded-md">
+                            <label className="flex items-center justify-between cursor-pointer">
+                                <span className="text-sm font-medium text-gray-300">Visibilità Pubblica</span>
+                                <div className="relative">
+                                    <input
+                                        type="checkbox"
+                                        checked={localStructure.isPublic === 1}
+                                        onChange={(e) => {
+                                            const newValue = e.target.checked ? 1 : 0;
+                                            trpc.optionStructures.togglePublic.useMutation({
+                                                onSuccess: () => {
+                                                    setLocalStructure(prev => prev ? { ...prev, isPublic: newValue } : null);
+                                                    toast.success(newValue === 1 ? 'Struttura resa pubblica' : 'Struttura resa privata');
+                                                },
+                                                onError: (error) => {
+                                                    toast.error('Errore', { description: error.message });
+                                                }
+                                            }).mutate({ structureId: localStructure.id, isPublic: e.target.checked });
+                                        }}
+                                        className="sr-only peer"
+                                        disabled={isReadOnly}
+                                    />
+                                    <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-accent rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
+                                </div>
+                            </label>
+                            <p className="text-xs text-gray-400 mt-2">
+                                {localStructure.isPublic === 1 ? '🌐 Visibile a tutti gli utenti' : '🔒 Visibile solo a te'}
+                            </p>
+                        </div>
+                    )}
                     
                     <div className="flex-grow overflow-y-auto pr-2 space-y-3 max-h-[55vh]">
                         {localStructure.legs.map((leg, index) => {

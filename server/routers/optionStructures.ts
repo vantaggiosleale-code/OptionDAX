@@ -118,6 +118,9 @@ export const optionStructuresRouter = router({
         vega: z.string().optional(),
         closingDate: z.string().optional(),
         realizedPnl: z.string().optional(),
+        isPublic: z.number().default(0).optional(),
+        isTemplate: z.number().default(0).optional(),
+        originalStructureId: z.number().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -142,6 +145,9 @@ export const optionStructuresRouter = router({
         closingDate: input.closingDate,
         realizedPnl: input.realizedPnl,
         sharedWith: null,
+        isPublic: input.isPublic ?? 0,
+        isTemplate: input.isTemplate ?? 0,
+        originalStructureId: input.originalStructureId,
       };
 
       const [result] = await db.insert(structures).values(newStructure);
@@ -549,6 +555,147 @@ export const optionStructuresRouter = router({
           realizedPnl: null,
         })
         .where(eq(structures.id, input.id));
+
+      return { success: true };
+    }),
+
+  /**
+   * Get all public structures (visible to all users)
+   */
+  listPublic: protectedProcedure
+    .input(
+      z.object({
+        status: z.enum(['active', 'closed', 'all']).default('all'),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error('Database not available');
+
+      // Base query - show only public structures
+      const conditions = [eq(structures.isPublic, 1)];
+
+      // Filter by status
+      if (input.status !== 'all') {
+        conditions.push(eq(structures.status, input.status));
+      }
+
+      const results = await db.select().from(structures).where(and(...conditions));
+
+      // Parse JSON fields
+      return results.map(s => ({
+        ...s,
+        legs: JSON.parse(s.legs),
+        sharedWith: s.sharedWith ? JSON.parse(s.sharedWith) : [],
+        status: s.status as 'active' | 'closed',
+      }));
+    }),
+
+  /**
+   * Import (copy) a public structure to current user's account
+   */
+  import: protectedProcedure
+    .input(z.object({ structureId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error('Database not available');
+
+      // Get original structure
+      const [original] = await db
+        .select()
+        .from(structures)
+        .where(eq(structures.id, input.structureId))
+        .limit(1);
+
+      if (!original) {
+        throw new Error('Structure not found');
+      }
+
+      // Check if structure is public
+      if (original.isPublic !== 1) {
+        throw new Error('Structure is not public');
+      }
+
+      // Create independent copy
+      const newStructure: InsertStructure = {
+        userId: ctx.user.id,
+        tag: original.tag + ' (Copy)',
+        multiplier: original.multiplier,
+        legsPerContract: original.legsPerContract,
+        legs: original.legs, // Already JSON string
+        status: original.status,
+        openPnl: original.openPnl,
+        pdc: original.pdc,
+        delta: original.delta,
+        gamma: original.gamma,
+        theta: original.theta,
+        vega: original.vega,
+        closingDate: original.closingDate,
+        realizedPnl: original.realizedPnl,
+        sharedWith: null,
+        isPublic: 0, // Imported copies are private by default
+        isTemplate: 0,
+        originalStructureId: original.id, // Track original
+      };
+
+      const [result] = await db.insert(structures).values(newStructure);
+
+      // Return created structure
+      const [createdStructure] = await db
+        .select()
+        .from(structures)
+        .where(eq(structures.id, result.insertId));
+
+      if (!createdStructure) {
+        throw new Error('Failed to retrieve imported structure');
+      }
+
+      return {
+        ...createdStructure,
+        legs: JSON.parse(createdStructure.legs),
+        sharedWith: createdStructure.sharedWith ? JSON.parse(createdStructure.sharedWith) : [],
+      };
+    }),
+
+  /**
+   * Toggle public/private visibility (admin only)
+   */
+  togglePublic: protectedProcedure
+    .input(
+      z.object({
+        structureId: z.number(),
+        isPublic: z.boolean(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const db = await getDb();
+      if (!db) throw new Error('Database not available');
+
+      // Check if user is admin
+      if (ctx.user.role !== 'admin') {
+        throw new Error('Access denied: Only admins can change visibility');
+      }
+
+      // Check ownership
+      const [structure] = await db
+        .select()
+        .from(structures)
+        .where(eq(structures.id, input.structureId))
+        .limit(1);
+
+      if (!structure) {
+        throw new Error('Structure not found');
+      }
+
+      if (structure.userId !== ctx.user.id) {
+        throw new Error('Access denied: You can only change visibility of your own structures');
+      }
+
+      // Update visibility
+      await db
+        .update(structures)
+        .set({ isPublic: input.isPublic ? 1 : 0 })
+        .where(eq(structures.id, input.structureId));
 
       return { success: true };
     }),

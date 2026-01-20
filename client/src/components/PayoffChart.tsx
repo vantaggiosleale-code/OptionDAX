@@ -296,7 +296,6 @@ const PayoffChart: React.FC<PayoffChartProps> = ({ legs, marketData, multiplier 
         <LineChart 
             data={chartData} 
             margin={{ top: 5, right: 20, left: -10, bottom: 5 }}
-            onWheel={handleWheel}
         >
             <CartesianGrid strokeDasharray="3 3" stroke="#444444" />
             <XAxis 
