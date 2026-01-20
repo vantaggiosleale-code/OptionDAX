@@ -161,7 +161,8 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
 
     const addLeg = () => {
         if (!localStructure || isReadOnly) return;
-        const newId = localStructure.legs.length > 0 ? Math.max(...localStructure.legs.map(l => l.id)) + 1 : 1;
+        // Generate unique ID using timestamp + random to avoid conflicts
+        const newId = Date.now() + Math.floor(Math.random() * 1000);
         
         // Calcola la scadenza predefinita: 3° venerdì del mese successivo
         const nextMonthDate = new Date();
@@ -215,6 +216,8 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
                     impliedVolatility: leg.impliedVolatility,
                     openingCommission: leg.openingCommission || 2,
                     closingCommission: leg.closingCommission || 2,
+                    closingPrice: leg.closingPrice,
+                    closingDate: leg.closingDate,
                 }));
                 
                 await createMutation.mutateAsync({

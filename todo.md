@@ -248,3 +248,7 @@
 
 ## Bug UI/UX
 - [x] BUG: Simbolo € esce fuori dal box nelle metriche (Vincita Media, Perdita Media, Max Drawdown) - RISOLTO: ridotto font size, aggiunto flex-wrap e break-words
+
+## 🔴 BUG CRITICI (PRIORITÀ MASSIMA)
+- [x] BUG CRITICO: Modificare prezzo apertura/chiusura su una gamba modifica TUTTE le altre gambe - RISOLTO: generazione ID univoci con timestamp+random
+- [x] BUG CRITICO: Prezzi di chiusura non vengono salvati quando si clicca "Salva Modifiche" - RISOLTO: aggiunto closingPrice e closingDate al mapping legs
