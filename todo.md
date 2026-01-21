@@ -294,3 +294,12 @@
 - [ ] Invalidare cache lista pubblica dopo toggle visibilità
 - [ ] Aggiungere badge visivo "🌐 Pubblica" sulle card strutture
 - [ ] Testare flusso completo: admin pubblica → utente importa → modifica copia indipendente
+
+- [x] 🔴 BUG: Generazione grafica fallisce con errore 500 Internal Server Error - RISOLTO: migrato da Puppeteer a html-to-image (generazione lato client)
+- [x] Installare html-to-image per generazione lato client
+- [x] Creare componente GraphicTemplate per rendering HTML
+- [x] Implementare GraphicModal con generazione lato client
+- [x] Backend per upload Base64 su S3
+- [x] Test end-to-end generazione grafica
+- [ ] Rimuovere componente SimpleGraphicTest (test temporaneo)
+- [ ] Rimuovere pulsante TEST dall'header

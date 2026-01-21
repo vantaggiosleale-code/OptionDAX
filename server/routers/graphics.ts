@@ -2,41 +2,20 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../_core/trpc";
 import { TRPCError } from "@trpc/server";
 import { getDb } from "../db";
-import { structures, structureGraphics } from "../../drizzle/schema";
-import { eq } from "drizzle-orm";
-import {
-  generateGraphic,
-  formatDaxPrice,
-  formatDate,
-  calculatePnL,
-  calculateDuration,
-} from "../graphics/generator";
-
-interface OptionLeg {
-  optionType: "Call" | "Put";
-  strike: number;
-  expiryDate: string;
-  tradeDate: string;
-  tradePrice: number;
-  quantity: number;
-  openingCommission: number;
-  closingCommission: number;
-  closingPrice?: number | null;
-  closingDate?: string | null;
-}
+import { structureGraphics } from "../../drizzle/schema";
+import { eq, desc } from "drizzle-orm";
+import { storagePut } from "../storage";
 
 export const graphicsRouter = router({
   /**
-   * Genera una grafica Telegram per una struttura
+   * Salva grafica generata dal client (base64) su S3
    */
-  generate: protectedProcedure
+  saveFromClient: protectedProcedure
     .input(
       z.object({
         structureId: z.number(),
         type: z.enum(["apertura", "aggiustamento", "chiusura"]),
-        // Per aggiustamento: specificare quali gambe sono state chiuse/aggiunte
-        closedLegIndices: z.array(z.number()).optional(),
-        addedLegIndices: z.array(z.number()).optional(),
+        imageBase64: z.string(), // Data URL format: "data:image/png;base64,..."
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -48,7 +27,24 @@ export const graphicsRouter = router({
         });
       }
 
-      // Recupera struttura
+      // Estrai base64 data dal data URL
+      const base64Data = input.imageBase64.split(",")[1];
+      if (!base64Data) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Formato immagine non valido",
+        });
+      }
+
+      // Converti base64 → Buffer
+      const imageBuffer = Buffer.from(base64Data, "base64");
+
+      // Upload su S3
+      const timestamp = Date.now();
+      const key = `graphics/${input.structureId}-${input.type}-${timestamp}.png`;
+      const { url } = await storagePut(key, imageBuffer, "image/png");
+
+      // Salva nel database
       const db = await getDb();
       if (!db) {
         throw new TRPCError({
@@ -57,132 +53,14 @@ export const graphicsRouter = router({
         });
       }
 
-      const structure = await db
-        .select()
-        .from(structures)
-        .where(eq(structures.id, input.structureId))
-        .limit(1)
-        .then((rows: any[]) => rows[0]);
-
-      if (!structure) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Struttura non trovata",
-        });
-      }
-
-      // Parse legs
-      const legs: OptionLeg[] = JSON.parse(structure.legs);
-
-      // Ottieni prezzo DAX corrente (mock per ora, sostituire con API reale)
-      const daxSpot = 24703.12;
-
-      let imageUrl: string;
-
-      if (input.type === "apertura") {
-        // Genera grafica apertura
-        const data = {
-          tag: structure.tag,
-          date: formatDate(structure.createdAt),
-          daxSpot: formatDaxPrice(daxSpot),
-          legs: legs.map((leg) => ({
-            ...leg,
-            expiryDate: formatDate(leg.expiryDate),
-          })),
-        };
-
-        imageUrl = await generateGraphic("apertura", data);
-      } else if (input.type === "aggiustamento") {
-        // Genera grafica aggiustamento
-        const closedLegs = input.closedLegIndices
-          ? input.closedLegIndices.map((i) => legs[i])
-          : legs.filter((leg) => leg.closingPrice !== null && leg.closingPrice !== undefined);
-
-        const addedLegs = input.addedLegIndices
-          ? input.addedLegIndices.map((i) => legs[i])
-          : [];
-
-        // Calcola P&L parziale delle gambe chiuse
-        let totalPnlPoints = 0;
-        closedLegs.forEach((leg) => {
-          if (leg.closingPrice !== null && leg.closingPrice !== undefined) {
-            const pnl = (leg.closingPrice - leg.tradePrice) * leg.quantity;
-            totalPnlPoints += pnl;
-          }
-        });
-
-        const pnl = calculatePnL(totalPnlPoints, structure.multiplier);
-
-        const data = {
-          tag: structure.tag,
-          date: formatDate(new Date()),
-          daxSpot: formatDaxPrice(daxSpot),
-          closedLegs: closedLegs.map((leg) => ({
-            ...leg,
-            expiryDate: formatDate(leg.expiryDate),
-          })),
-          addedLegs: addedLegs.map((leg) => ({
-            ...leg,
-            expiryDate: formatDate(leg.expiryDate),
-          })),
-          pnlPoints: pnl.points,
-          pnlEuro: pnl.euro,
-        };
-
-        imageUrl = await generateGraphic("aggiustamento", data);
-      } else {
-        // Genera grafica chiusura totale
-        // Calcola P&L totale
-        let totalPnlPoints = 0;
-        legs.forEach((leg) => {
-          const closingPrice = leg.closingPrice ?? 0;
-          const pnl = (closingPrice - leg.tradePrice) * leg.quantity;
-          totalPnlPoints += pnl;
-        });
-
-        // Sottrai commissioni
-        const totalCommissions = legs.reduce(
-          (sum, leg) => sum + leg.openingCommission + leg.closingCommission,
-          0
-        );
-        totalPnlPoints -= totalCommissions / structure.multiplier;
-
-        const pnl = calculatePnL(totalPnlPoints, structure.multiplier);
-
-        const openingDate = structure.createdAt;
-        const closingDate = structure.closingDate
-          ? new Date(structure.closingDate)
-          : new Date();
-
-        const data = {
-          tag: structure.tag,
-          openingDate: formatDate(openingDate),
-          closingDate: formatDate(closingDate),
-          duration: calculateDuration(openingDate, closingDate),
-          pnlPoints: pnl.points,
-          pnlEuro: pnl.euro,
-        };
-
-        imageUrl = await generateGraphic("chiusura", data);
-      }
-
-      // Salva nel database
-      const imageKey = imageUrl.split("/").pop() || "";
-      const dbInstance = await getDb();
-      if (!dbInstance) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Database non disponibile",
-        });
-      }
-      await dbInstance.insert(structureGraphics).values({
+      await db.insert(structureGraphics).values({
         structureId: input.structureId,
         type: input.type,
-        imageUrl,
-        imageKey,
+        imageUrl: url,
+        imageKey: key,
       });
 
-      return { imageUrl };
+      return { url };
     }),
 
   /**
@@ -198,11 +76,12 @@ export const graphicsRouter = router({
           message: "Database non disponibile",
         });
       }
+
       const graphics = await db
         .select()
         .from(structureGraphics)
         .where(eq(structureGraphics.structureId, input.structureId))
-        .orderBy(structureGraphics.createdAt);
+        .orderBy(desc(structureGraphics.createdAt));
 
       return graphics;
     }),
@@ -228,6 +107,7 @@ export const graphicsRouter = router({
           message: "Database non disponibile",
         });
       }
+
       await db.delete(structureGraphics).where(eq(structureGraphics.id, input.id));
 
       return { success: true };

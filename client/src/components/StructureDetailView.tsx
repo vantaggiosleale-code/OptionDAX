@@ -13,7 +13,7 @@ import QuantitySelector from './QuantitySelector';
 import StrikeSelector from './StrikeSelector';
 import { useAuth } from '../_core/hooks/useAuth';
 import { toast } from 'sonner';
-import GraphicModal from './GraphicModal';
+import { GraphicModal } from './GraphicModal';
 
 const CheckCircleIcon = () => (
     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -812,7 +812,8 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
             {/* Modal Generazione Grafiche */}
             {'id' in localStructure && (
                 <GraphicModal 
-                    structureId={localStructure.id} 
+                    structureId={localStructure.id}
+                    structureTag={localStructure.tag}
                     isOpen={showGraphicModal} 
                     onClose={() => setShowGraphicModal(false)} 
                 />
