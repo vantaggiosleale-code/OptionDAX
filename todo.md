@@ -312,3 +312,7 @@
 - [x] Ingrandire badge LONG/SHORT per migliore visibilità
 - [x] Testare UI fixata su struttura reale
 - [x] Aggiungere data scadenza contratto nelle card gambe
+
+## Fix Pulsanti Trasparenti Modal (COMPLETATO)
+- [x] Aggiungere sfondo solido ai pulsanti tipo grafica (outline variant ha bg trasparente)
+- [x] Testare visibilità pulsanti su sfondo scuro

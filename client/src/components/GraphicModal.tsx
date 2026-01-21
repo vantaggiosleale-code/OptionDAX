@@ -201,7 +201,7 @@ export function GraphicModal({ isOpen, onClose, structureId, structureTag }: Gra
                   setSelectedType('apertura');
                   setGeneratedImageUrl(null);
                 }}
-                className="h-auto py-3"
+                className={`h-auto py-3 ${selectedType !== 'apertura' ? 'bg-card hover:bg-accent' : ''}`}
               >
                 <div className="text-center">
                   <div className="font-semibold">Apertura</div>
@@ -215,7 +215,7 @@ export function GraphicModal({ isOpen, onClose, structureId, structureTag }: Gra
                   setSelectedType('aggiustamento');
                   setGeneratedImageUrl(null);
                 }}
-                className="h-auto py-3"
+                className={`h-auto py-3 ${selectedType !== 'aggiustamento' ? 'bg-card hover:bg-accent' : ''}`}
               >
                 <div className="text-center">
                   <div className="font-semibold">Aggiustamento</div>
@@ -229,7 +229,7 @@ export function GraphicModal({ isOpen, onClose, structureId, structureTag }: Gra
                   setSelectedType('chiusura');
                   setGeneratedImageUrl(null);
                 }}
-                className="h-auto py-3"
+                className={`h-auto py-3 ${selectedType !== 'chiusura' ? 'bg-card hover:bg-accent' : ''}`}
               >
                 <div className="text-center">
                   <div className="font-semibold">Chiusura</div>
