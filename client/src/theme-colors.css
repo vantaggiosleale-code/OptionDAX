@@ -1,0 +1,56 @@
+/* Theme-aware semantic colors */
+.text-foreground {
+  color: #111827; /* light mode: dark gray */
+}
+
+.dark .text-foreground {
+  color: #f9fafb; /* dark mode: almost white */
+}
+
+.text-muted {
+  color: #6b7280; /* light mode: medium gray */
+}
+
+.dark .text-muted {
+  color: #9ca3af; /* dark mode: light gray */
+}
+
+.text-primary {
+  color: #2563eb; /* light mode: blue-600 */
+}
+
+.dark .text-primary {
+  color: #60a5fa; /* dark mode: blue-400 */
+}
+
+.text-success {
+  color: #059669; /* light mode: emerald-600 */
+}
+
+.dark .text-success {
+  color: #10b981; /* dark mode: emerald-500 */
+}
+
+.text-error {
+  color: #dc2626; /* light mode: red-600 */
+}
+
+.dark .text-error {
+  color: #ef4444; /* dark mode: red-500 */
+}
+
+.bg-card {
+  background-color: #ffffff; /* light mode: white */
+}
+
+.dark .bg-card {
+  background-color: #1f2937; /* dark mode: gray-800 */
+}
+
+.border-default {
+  border-color: #e5e7eb; /* light mode: gray-200 */
+}
+
+.dark .border-default {
+  border-color: #374151; /* dark mode: gray-700 */
+}

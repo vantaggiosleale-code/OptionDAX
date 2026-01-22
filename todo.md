@@ -500,3 +500,16 @@
 - [x] Light mode verificato funzionante: sidebar bianca + content bianco + card bianche
 - [ ] Testare dark mode toggle
 - [ ] Applicare stessa soluzione a PortfolioAnalysis, PayoffSimulator, GreeksCalculator, SettingsView
+
+## BUG CRITICO: Colori Testo Illeggibili (RISOLTO)
+- [x] Light Mode: testo bianco/grigio chiaro su sfondo bianco → RISOLTO
+  * Sidebar: Aggiunto inline styles per logo, nav items, toggle, copyright
+  * Main content: Creato theme-colors.css con classi semantiche (.text-foreground, .text-muted, ecc.)
+- [x] Causa: Rimosso dark:text-* ma non aggiunto inline styles per text color
+- [x] Soluzione implementata:
+  * Sidebar.tsx: inline styles per tutti gli elementi di testo
+  * theme-colors.css: classi semantiche che cambiano con .dark
+  * StructureListView.tsx: sostituito text-white, text-gray-* con classi semantiche
+- [x] Light mode verificato funzionante: sidebar bianca + testo nero leggibile
+- [ ] Dark mode da testare: cliccare toggle per verificare
+- [x] NON TOCCARE: StructureDetailView (vista singola struttura) → lasciata nera come richiesto utente

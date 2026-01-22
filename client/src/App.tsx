@@ -1,5 +1,6 @@
 
 import React from 'react';
+import './theme-colors.css';
 // Navigazione gestita con state locale invece di Zustand
 import { useAuth } from './_core/hooks/useAuth';
 import { getLoginUrl } from './const';
