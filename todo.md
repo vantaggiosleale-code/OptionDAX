@@ -534,3 +534,21 @@
   * Sostituito text-gray-500 con style={{ color: textMuted }} (sed)
 - [x] Light mode verificato: tutti i testi LEGGIBILI (nero scuro/grigio scuro)
 - [ ] Dark mode da testare: cliccare toggle per verificare testi bianchi
+
+## 🌓 Fix Dark Mode: Sfondo Nero Completo (IN CORSO)
+- [x] Problema: dark mode aveva sidebar nera ma contenuto centrale bianco con testi grigi chiari
+- [x] Soluzione scelta: sfondo scuro completo anche nella parte centrale (più coerente)
+- [x] Aggiunte costanti colori in StructureListView:
+  * bgCard = #ffffff (light) / #111827 (dark)
+  * bgContainer = #ffffff (light) / #030712 (dark)
+  * borderColor = #e5e7eb (light) / #1f2937 (dark)
+- [x] Sostituiti TUTTI i bg-white con inline styles:
+  * Card "Analisi di Portafoglio" (riga 208)
+  * Card metriche greche (riga 246)
+  * Container "Strutture Attive" (riga 272)
+  * Card singola struttura attiva (riga 311)
+  * Container "Strutture Chiuse" (riga 360)
+  * Card singola struttura chiusa (riga 400, con condizionale per selezione)
+  * Footer bulk edit (riga 464)
+- [x] Light mode verificato ancora funzionante dopo modifiche
+- [ ] Dark mode da testare: utente deve cliccare toggle per verificare tutto nero

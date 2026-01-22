@@ -101,6 +101,9 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
     const textPrimary = theme === 'light' ? '#374151' : '#f9fafb';
     const textSecondary = theme === 'light' ? '#6b7280' : '#d1d5db';
     const textMuted = theme === 'light' ? '#9ca3af' : '#9ca3af';
+    const bgCard = theme === 'light' ? '#ffffff' : '#111827';
+    const bgContainer = theme === 'light' ? '#ffffff' : '#030712';
+    const borderColor = theme === 'light' ? '#e5e7eb' : '#1f2937';
     
     const { structures, deleteStructures, isLoading } = useStructures();
     const { settings } = useSettingsStore();
@@ -202,7 +205,7 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
                 }}
             >
 
-                 <div className="bg-white border border-gray-200 rounded-lg p-4">
+                 <div className="border rounded-lg p-4" style={{ backgroundColor: bgCard, borderColor: borderColor }}>
                     <div className="flex flex-wrap gap-y-3 justify-between items-center mb-4">
                         <div className="flex items-center space-x-3">
                             <PortfolioIcon />
@@ -240,7 +243,7 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
                             </div>
                         </div>
                     </div>
-                    <div className="bg-white border border-gray-200 p-4 rounded-lg grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+                    <div className="border p-4 rounded-lg grid grid-cols-2 md:grid-cols-5 gap-4 text-center" style={{ backgroundColor: bgCard, borderColor: borderColor }}>
                          <div>
                             <span className="text-sm -foreground" style={{ color: textSecondary }}>P/L Aperto Totale</span>
                             <p className={`font-mono text-lg md:text-xl font-bold ${totalPortfolioUnrealizedPnl >= 0 ? 'text-profit' : 'text-loss'}`}>
@@ -266,7 +269,7 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
                     </div>
                 </div>
 
-                <div className="bg-white border border-gray-200 rounded-lg p-4">
+                <div className="border rounded-lg p-4" style={{ backgroundColor: bgCard, borderColor: borderColor }}>
                     <div className="flex flex-wrap gap-y-3 justify-between items-center mb-4">
                         <h1 className="text-2xl font-bold " style={{ color: textPrimary }}>Strutture Attive</h1>
                         <div className="flex items-center space-x-2">
@@ -305,7 +308,8 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
                                 return (
                                     <div 
                                         key={structure.id} 
-                                        className="bg-white border border-gray-200 p-4 rounded-lg cursor-pointer hover:border-sky-500 transition-all flex flex-col sm:flex-row sm:justify-between sm:items-center"
+                                        className="border p-4 rounded-lg cursor-pointer hover:border-sky-500 transition-all flex flex-col sm:flex-row sm:justify-between sm:items-center"
+                                        style={{ backgroundColor: bgCard, borderColor: borderColor }}
                                         onClick={() => setCurrentView('detail', structure.id)}
                                     >
                                         <div className="flex-shrink-0 mb-3 sm:mb-0 w-full sm:w-auto">
@@ -354,7 +358,7 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
                     </div>
                 </div>
 
-                <div className="bg-white border border-gray-200 rounded-lg p-4">
+                <div className="border rounded-lg p-4" style={{ backgroundColor: bgCard, borderColor: borderColor }}>
                     <div className="flex justify-between items-center mb-4">
                         <div className="flex items-center space-x-3">
                             <ArchiveIcon />
@@ -393,7 +397,11 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
                                 return (
                                     <div
                                         key={structure.id}
-                                        className={`rounded-lg flex items-center transition-all cursor-pointer ${isBulkEditMode ? (isSelected ? 'bg-sky-500 border-2 border-sky-500' : 'bg-white border border-gray-200 hover:border-sky-500') : 'bg-white border border-gray-200 hover:border-sky-500'}`}
+                                        className={`rounded-lg flex items-center transition-all cursor-pointer ${isBulkEditMode ? (isSelected ? 'bg-sky-500 border-2 border-sky-500' : 'border hover:border-sky-500') : 'border hover:border-sky-500'}`}
+                                        style={{
+                                            backgroundColor: isBulkEditMode && isSelected ? undefined : bgCard,
+                                            borderColor: isBulkEditMode && isSelected ? undefined : borderColor,
+                                        }}
                                         onClick={() => {
                                             if (isBulkEditMode) {
                                                 handleSelect(structure.id);
@@ -453,7 +461,7 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
             </div>
 
             {isBulkEditMode && selectedIds.size > 0 && (
-                <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-40 transition-transform duration-300 ease-in-out">
+                <div className="fixed bottom-0 left-0 right-0 border-t p-4 z-40 transition-transform duration-300 ease-in-out" style={{ backgroundColor: bgCard, borderColor: borderColor }}>
                     <div className="max-w-4xl mx-auto flex justify-between items-center">
                         <span className="font-semibold " style={{ color: textPrimary }}>{selectedIds.size} {selectedIds.size === 1 ? 'struttura selezionata' : 'strutture selezionate'}</span>
                         <button
