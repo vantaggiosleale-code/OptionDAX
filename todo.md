@@ -375,6 +375,14 @@
 - [ ] Testare layout responsive su vari breakpoint (richiede test utente su dispositivo mobile)
 
 ## 🔧 Fix Mobile Overlay Transparency (URGENT)
-- [x] Aumentare opacità overlay da 50% a 80%
+- [x] Aumentare opacità overlay da 50% a 80% (TROPPO SCURO - da ridurre)
 - [x] Fixare z-index overlay (z-50) e sidebar (z-60) per stacking corretto
-- [ ] Testare su mobile che overlay oscuri correttamente il contenuto (richiede test utente)
+- [ ] Ridurre opacità overlay a 60-65% per bilanciare visibilità
+- [ ] Verificare ordine rendering DOM (overlay prima di sidebar)
+- [ ] Testare su mobile che sidebar sia visibile sopra overlay
+
+## 🎨 UI Adjustments Header e Sidebar
+- [x] Spostare nome account e pulsante Logout più a destra nell'header (aggiunto ml-auto)
+- [x] Cambiare sidebar da trasparente a BIANCO PIENO (bg-white solido)
+- [x] Rimuovere tutte le trasparenze dalla sidebar
+- [x] Testare che sidebar bianca sia leggibile su sfondo scuro

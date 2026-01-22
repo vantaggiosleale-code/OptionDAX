@@ -70,18 +70,17 @@ const App: React.FC = () => {
 
     return (
         <div className="bg-background text-foreground font-sans min-h-screen flex">
-            {/* Sidebar */}
+            {/* Mobile Overlay (renderizzato PRIMA della sidebar per stacking corretto) */}
+            {isAuthenticated && isSidebarOpen && (
+                <div 
+                    className="fixed inset-0 bg-black/65 z-50 md:hidden"
+                    onClick={() => setIsSidebarOpen(false)}
+                />
+            )}
+            
+            {/* Sidebar (renderizzata DOPO l'overlay per stare sopra) */}
             {isAuthenticated && (
-                <>
-                    <Sidebar currentView={currentView} onNavigate={(view) => { handleNavigate(view); setIsSidebarOpen(false); }} isOpen={isSidebarOpen} />
-                    {/* Mobile Overlay */}
-                    {isSidebarOpen && (
-                        <div 
-                            className="fixed inset-0 bg-black/80 z-50 md:hidden"
-                            onClick={() => setIsSidebarOpen(false)}
-                        />
-                    )}
-                </>
+                <Sidebar currentView={currentView} onNavigate={(view) => { handleNavigate(view); setIsSidebarOpen(false); }} isOpen={isSidebarOpen} />
             )}
             
             {/* Main Content */}
@@ -99,7 +98,7 @@ const App: React.FC = () => {
                             </svg>
                         </button>
                     )}
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 ml-auto">
                         {!loading && (
                             isAuthenticated ? (
                                 <div className="flex items-center space-x-3">
