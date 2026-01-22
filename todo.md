@@ -396,3 +396,9 @@
 - [x] Rimuovere elemento overlay nero trasparente da App.tsx
 - [x] Testare che sidebar mobile funzioni senza overlay
 - [x] Sidebar mobile ora si apre senza overlay scuro dietro
+
+## 🔧 Fix Logo Blurrato Sidebar
+- [x] Verificare cause blur logo "Option DAX" in Sidebar.tsx
+- [x] Rimosso tracking-tight che causava blur
+- [x] Aggiunto antialiased per rendering nitido
+- [ ] Testare che logo sia nitido e leggibile (richiede test utente)

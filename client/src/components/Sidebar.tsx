@@ -21,7 +21,7 @@ export function Sidebar({ currentView, onNavigate, isOpen = false }: SidebarProp
     }`}>
       {/* Logo */}
       <div className="p-6 border-b border-gray-200">
-        <h1 className="text-xl font-bold text-gray-900 tracking-tight">
+        <h1 className="text-xl font-bold text-gray-900 antialiased">
           Option DAX
         </h1>
         <p className="text-xs text-gray-600 mt-1">
