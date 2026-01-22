@@ -22,7 +22,7 @@ export function Sidebar({ currentView, onNavigate }: SidebarProps) {
           Option DAX
         </h1>
         <p className="text-xs text-muted-foreground mt-1">
-          Professional Trading System
+          Professional Trading Software
         </p>
       </div>
 
@@ -54,14 +54,11 @@ export function Sidebar({ currentView, onNavigate }: SidebarProps) {
 
       {/* Footer */}
       <div className="p-4 border-t border-sidebar-border">
-        <div className="text-xs text-muted-foreground">
-          <div className="flex items-center justify-between mb-1">
-            <span>Spot DAX</span>
-            <span className="text-sidebar-foreground font-mono">24,560.98</span>
-          </div>
-          <div className="text-[10px] text-muted-foreground/70">
-            Aggiornato: {new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })}
-          </div>
+        <div className="text-xs text-muted-foreground text-center">
+          <p className="text-[10px] leading-relaxed">
+            Software by Opzionetika<br />
+            Copyright Vito Tarantini
+          </p>
         </div>
       </div>
     </aside>

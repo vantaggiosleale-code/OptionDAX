@@ -76,40 +76,8 @@ const App: React.FC = () => {
             
             {/* Main Content */}
             <div className={`flex-1 flex flex-col ${isAuthenticated ? 'ml-64' : ''}`}>
-                <header className="bg-card/50 backdrop-blur-sm border-b border-border p-3 flex items-center justify-between sticky top-0 z-10">
-                    <div 
-                        className="flex items-center space-x-2 cursor-pointer"
-                        onClick={() => handleSetCurrentView('dashboard')}
-                    >
-                        <div className="w-8 h-8 bg-accent rounded-md flex items-center justify-center font-bold text-xl">O</div>
-                        <h1 className="text-xl font-bold text-white">Option DAX</h1>
-                    </div>
+                <header className="bg-card/50 backdrop-blur-sm border-b border-border p-3 flex items-center justify-end sticky top-0 z-10">
                     <div className="flex items-center space-x-2">
-                        {isAuthenticated && (
-                            <>
-                                <button 
-                                    onClick={() => handleSetCurrentView('public')} 
-                                    className="text-gray-400 hover:text-white px-3 py-2 rounded-lg hover:bg-gray-700 transition text-sm"
-                                    title="Strutture Pubbliche"
-                                >
-                                    🌐 Pubbliche
-                                </button>
-                                <button 
-                                    onClick={() => handleSetCurrentView('analysis')} 
-                                    className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-gray-700 transition"
-                                    title="Analisi Portafoglio"
-                                >
-                                    <ChartBarIcon />
-                                </button>
-                                <button 
-                                    onClick={() => handleSetCurrentView('settings')} 
-                                    className="text-gray-400 hover:text-white p-2 rounded-full hover:bg-gray-700 transition"
-                                    title="Impostazioni"
-                                >
-                                    <SettingsIcon />
-                                </button>
-                            </>
-                        )}
                         {!loading && (
                             isAuthenticated ? (
                                 <div className="flex items-center space-x-3">
