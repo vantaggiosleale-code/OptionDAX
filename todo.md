@@ -407,3 +407,12 @@
 - [x] Identificare pulsante alla riga 36 di SettingsView.tsx ("Torna alla Lista")
 - [x] Rimuovere pulsante inutile (ridondante con sidebar navigation)
 - [x] Testare che SettingsView funzioni senza pulsante
+
+## 📜 Implementare History View - Storico Strutture Chiuse
+- [x] Modificare History.tsx per caricare strutture chiuse dal database
+- [x] Usare tRPC query esistente optionStructures.list({ status: 'closed' })
+- [x] Mostrare tabella con colonne: Nome (tag), Data Chiusura, P/L, PDC, Greche
+- [x] Aggiungere filtri per P/L (tutte/positive/negative)
+- [x] Aggiungere ordinamento cliccabile (per tag, data chiusura, P/L)
+- [x] Implementare pulsante export CSV con download automatico
+- [ ] Testare che History mostri le strutture chiuse esistenti (richiede test utente)
