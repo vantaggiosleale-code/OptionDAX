@@ -851,8 +851,8 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
                                                 <td className="px-4 py-1 font-sans font-medium text-white">#{leg.id} {leg.quantity > 0 ? 'L' : 'S'} {leg.optionType.slice(0,1)} @{leg.strike}</td>
                                                 <td className="px-4 py-1 text-right text-white">{greeks?.delta.toFixed(2)}</td>
                                                 <td className="px-4 py-1 text-right text-white">{greeks?.gamma.toFixed(3)}</td>
-                                                <td className="px-4 py-1 text-right text-white">€{((greeks?.theta ?? 0) * localStructure.multiplier).toFixed(2)}</td>
-                                                <td className="px-4 py-1 text-right text-white">€{((greeks?.vega ?? 0) * localStructure.multiplier).toFixed(2)}</td>
+                                                <td className="px-4 py-1 text-right text-white">{(greeks?.theta ?? 0).toFixed(2)}</td>
+                                                <td className="px-4 py-1 text-right text-white">{(greeks?.vega ?? 0).toFixed(2)}</td>
                                             </tr>
                                         );
                                     })}
@@ -862,8 +862,8 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
                                         <td className="px-4 py-2 font-sans text-white">TOTALI</td>
                                         <td className="px-4 py-2 text-right text-white">{calculatedGreeks.totalGreeks.delta.toFixed(2)}</td>
                                         <td className="px-4 py-2 text-right text-white">{calculatedGreeks.totalGreeks.gamma.toFixed(3)}</td>
-                                        <td className="px-4 py-2 text-right text-white">€{(calculatedGreeks.totalGreeks.theta * localStructure.multiplier).toFixed(2)}</td>
-                                        <td className="px-4 py-2 text-right text-white">€{(calculatedGreeks.totalGreeks.vega * localStructure.multiplier).toFixed(2)}</td>
+                                        <td className="px-4 py-2 text-right text-white">{calculatedGreeks.totalGreeks.theta.toFixed(2)}</td>
+                                        <td className="px-4 py-2 text-right text-white">{calculatedGreeks.totalGreeks.vega.toFixed(2)}</td>
                                     </tr>
                                 </tfoot>
                             </table>

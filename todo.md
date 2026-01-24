@@ -783,3 +783,15 @@
 - [x] Cambiato top-0 → top-16 (64px dall'alto) per abbassare pulsanti zoom
 - [x] HMR applicato con successo
 - [ ] Test manuale: aprire struttura, cliccare "Genera Grafica", verificare pulsanti zoom non coprano Logout
+
+## Theta e Vega SOLO Punti in Tabella Dettagliata (IN PROGRESS)
+- [ ] Trovare colonne THETA e VEGA in StructureDetailView (tabella dettagliata)
+- [ ] Rimuovere simbolo € e moltiplicatore
+- [ ] Mostrare SOLO valore in punti (es. "-37.78", "133.22")
+- [ ] Testare visualizzazione tabella
+
+## Fix Theta e Vega StructureDetailView (COMPLETATO)
+- [x] Fix Theta e Vega in StructureDetailView: mostrare SOLO punti (non euro) nella tabella dettagliata
+- [x] Rimosso simbolo € da colonne Theta e Vega
+- [x] Rimosso moltiplicatore da calcolo (punti invece di euro)
+- [x] Mantenuto formato due righe in StructureListView (Dashboard) - NON MODIFICATO
