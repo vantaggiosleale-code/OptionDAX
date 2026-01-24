@@ -5,12 +5,15 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { CloudDownloadIcon, TrendingUpIcon, TrendingDownIcon } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface PublicStructuresViewProps {
   setCurrentView: (view: 'dashboard' | 'payoff' | 'greeks' | 'history' | 'settings' | 'detail' | 'analysis' | 'public' | 'test', structureId?: number | 'new' | null) => void;
 }
 
 const PublicStructuresView: React.FC<PublicStructuresViewProps> = ({ setCurrentView }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [statusFilter, setStatusFilter] = useState<'active' | 'closed' | 'all'>('all');
   
   const { data: publicStructures, isLoading, refetch } = trpc.optionStructures.listPublic.useQuery({
@@ -48,8 +51,8 @@ const PublicStructuresView: React.FC<PublicStructuresViewProps> = ({ setCurrentV
     <div className="space-y-6 p-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Strutture Pubbliche</h1>
-          <p className="text-muted-foreground">Esplora e importa strutture condivise dagli admin</p>
+          <h1 className="text-3xl font-bold" style={{ color: isDark ? '#ffffff' : '#111827' }}>Strutture Pubbliche</h1>
+          <p style={{ color: isDark ? '#9ca3af' : '#6b7280' }}>Esplora e importa strutture condivise dagli admin</p>
         </div>
         <Button variant="outline" onClick={() => setCurrentView('dashboard')}>
           Torna alle Mie Strutture
@@ -82,18 +85,18 @@ const PublicStructuresView: React.FC<PublicStructuresViewProps> = ({ setCurrentV
       {!publicStructures || publicStructures.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground">Nessuna struttura pubblica disponibile.</p>
+            <p style={{ color: isDark ? '#9ca3af' : '#6b7280' }}>Nessuna struttura pubblica disponibile.</p>
           </CardContent>
         </Card>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {publicStructures.map((structure) => (
-            <Card key={structure.id} className="bg-card border-border hover:border-primary transition-colors">
+            <Card key={structure.id} className="hover:border-primary transition-colors" style={{ backgroundColor: isDark ? '#1f2937' : '#ffffff', borderColor: isDark ? '#374151' : '#e5e7eb' }}>
               <CardHeader>
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
-                    <CardTitle className="text-lg">{structure.tag}</CardTitle>
-                    <CardDescription className="text-sm">
+                    <CardTitle className="text-lg" style={{ color: isDark ? '#ffffff' : '#111827' }}>{structure.tag}</CardTitle>
+                    <CardDescription className="text-sm" style={{ color: isDark ? '#9ca3af' : '#6b7280' }}>
                       {structure.legs.length} gambe • {structure.multiplier}x multiplier
                     </CardDescription>
                   </div>
@@ -111,8 +114,8 @@ const PublicStructuresView: React.FC<PublicStructuresViewProps> = ({ setCurrentV
                 {/* Structure Info */}
                 <div className="space-y-2 text-sm">
                   {structure.status === 'closed' && structure.realizedPnl && (
-                    <div className="flex justify-between items-center p-2 bg-muted rounded">
-                      <span className="text-muted-foreground">P&L Realizzato</span>
+                    <div className="flex justify-between items-center p-2 rounded" style={{ backgroundColor: isDark ? '#111827' : '#f3f4f6' }}>
+                      <span style={{ color: isDark ? '#9ca3af' : '#6b7280' }}>P&L Realizzato</span>
                       <span className={`font-semibold ${parseFloat(structure.realizedPnl) >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                         {parseFloat(structure.realizedPnl) >= 0 ? <TrendingUpIcon className="inline w-4 h-4 mr-1" /> : <TrendingDownIcon className="inline w-4 h-4 mr-1" />}
                         €{parseFloat(structure.realizedPnl).toFixed(2)}
@@ -121,13 +124,13 @@ const PublicStructuresView: React.FC<PublicStructuresViewProps> = ({ setCurrentV
                   )}
                   
                   {structure.closingDate && (
-                    <div className="flex justify-between items-center text-xs text-muted-foreground">
+                    <div className="flex justify-between items-center text-xs" style={{ color: isDark ? '#9ca3af' : '#6b7280' }}>
                       <span>Chiusa il</span>
                       <span>{structure.closingDate}</span>
                     </div>
                   )}
                   
-                  <div className="flex justify-between items-center text-xs text-muted-foreground">
+                  <div className="flex justify-between items-center text-xs" style={{ color: isDark ? '#9ca3af' : '#6b7280' }}>
                     <span>Creata il</span>
                     <span>{new Date(structure.createdAt).toLocaleDateString('it-IT')}</span>
                   </div>

@@ -718,3 +718,9 @@
 - [x] Test vitest passati (7/7) - marketplace.test.ts
 - [x] Test coprono: listPublic, import, togglePublic (admin only)
 - [ ] Test manuale: cliccare "Strutture Pubbliche" in sidebar, verificare lista e importazione
+
+## Fix Testi Invisibili Card Marketplace (COMPLETATO)
+- [x] Sostituito classi semantiche (text-foreground, text-muted-foreground, bg-card) con inline styles
+- [x] Aggiunto useTheme() e applicato colori dinamici (isDark ? dark : light)
+- [x] HMR applicato con successo
+- [ ] Test manuale: cliccare "Strutture Pubbliche", verificare testi leggibili in light e dark mode
