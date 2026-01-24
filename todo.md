@@ -760,3 +760,11 @@
 - [x] Desktop mantiene comportamento normale (md:pt-0)
 - [x] HMR applicato con successo
 - [ ] Test manuale: aprire sidebar su mobile, verificare logo visibile sotto barra browser
+
+## Visualizzazione Theta e Vega in Punti ed Euro (COMPLETATO)
+- [x] Trovata visualizzazione Theta e Vega in StructureListView (righe 340-351)
+- [x] Modificato per mostrare: "valore_punti (€valore_euro)"
+- [x] Applicato moltiplicatore standard per conversione punti → euro
+- [x] Aumentata larghezza colonne da sm:w-24 a sm:w-32 per accomodare testo più lungo
+- [x] Testato in Dashboard: Theta mostra "-15.18 (€-75.89)", Vega mostra "53.33 (€266.65)"
+- [x] HMR applicato con successo

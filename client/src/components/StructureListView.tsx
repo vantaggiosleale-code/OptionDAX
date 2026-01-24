@@ -337,13 +337,17 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
                                                 <span className="text-xs  block" style={{ color: textSecondary }}>Γ Gamma</span>
                                                 <p className="" style={{ color: textPrimary }}>{totalGreeks.gamma.toFixed(3)}</p>
                                             </div>
-                                            <div className="sm:w-24">
+                                            <div className="sm:w-32">
                                                 <span className="text-xs  block" style={{ color: textSecondary }}>Θ Theta</span>
-                                                <p className="" style={{ color: textPrimary }}>€{(totalGreeks.theta * structure.multiplier).toFixed(2)}</p>
+                                                <p className="" style={{ color: textPrimary }}>
+                                                    {totalGreeks.theta.toFixed(2)} (€{(totalGreeks.theta * structure.multiplier).toFixed(2)})
+                                                </p>
                                             </div>
-                                            <div className="sm:w-24">
+                                            <div className="sm:w-32">
                                                 <span className="text-xs  block" style={{ color: textSecondary }}>ν Vega</span>
-                                                <p className="" style={{ color: textPrimary }}>€{(totalGreeks.vega * structure.multiplier).toFixed(2)}</p>
+                                                <p className="" style={{ color: textPrimary }}>
+                                                    {totalGreeks.vega.toFixed(2)} (€{(totalGreeks.vega * structure.multiplier).toFixed(2)})
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
