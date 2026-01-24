@@ -735,3 +735,13 @@
 - [x] Formattazione automatica su onBlur
 - [x] HMR applicato con successo
 - [ ] Test manuale: aprire struttura, digitare "3,25" nel campo risk-free, verificare funzionamento
+
+## Rimuovere Moltiplicatore Duplicato e Rinominare Sezione (COMPLETATO)
+- [x] Trovata sezione "Parametri Default per Nuove Strutture" in SettingsView (riga 177)
+- [x] Rimosso campo "Moltiplicatore Default" dalla sezione (righe 219-233)
+- [x] Rinominata sezione: "Parametri Default per Nuove Strutture" → "Greche di Default per Nuove Strutture"
+- [x] Lasciati solo: Volatilità Implicita Default (%) e Tasso Risk-Free Default (%)
+- [x] Aggiornato StructureDetailView per leggere moltiplicatore da settings.defaultMultiplier invece di userSettings
+- [x] Campo defaultMultiplier rimane nel database user_settings per compatibilità backward (non più usato dal frontend)
+- [x] HMR applicato con successo
+- [ ] Test manuale: andare in Impostazioni, verificare che "Prodotto di Default" sia solo in alto e "Greche di Default" contenga solo Volatilità e Risk-Free

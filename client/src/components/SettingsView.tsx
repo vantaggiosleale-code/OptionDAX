@@ -174,9 +174,9 @@ const SettingsView: React.FC<SettingsViewProps> = ({ setCurrentView }) => {
                 </div>
             </div>
             
-            {/* Nuova sezione: Parametri Default per Nuove Strutture */}
+            {/* Nuova sezione: Greche di Default per Nuove Strutture */}
             <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow-sm">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Parametri Default per Nuove Strutture</h2>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Greche di Default per Nuove Strutture</h2>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
                     Questi valori verranno applicati automaticamente alle nuove strutture create. Le strutture esistenti non saranno modificate.
                 </p>
@@ -214,22 +214,6 @@ const SettingsView: React.FC<SettingsViewProps> = ({ setCurrentView }) => {
                             className={inputClasses}
                             disabled={isLoadingSettings}
                         />
-                    </div>
-                    
-                    <div>
-                        <label htmlFor="defaultMultiplierNew" className={labelClasses}>
-                            Moltiplicatore Default
-                        </label>
-                        <select
-                            id="defaultMultiplierNew"
-                            value={defaultMultiplier}
-                            onChange={(e) => setDefaultMultiplier(parseInt(e.target.value))}
-                            className={inputClasses}
-                            disabled={isLoadingSettings}
-                        >
-                            <option value="5">Indice (5&euro;/punto)</option>
-                            <option value="1">CFD (1&euro;/punto)</option>
-                        </select>
                     </div>
                 </div>
                 

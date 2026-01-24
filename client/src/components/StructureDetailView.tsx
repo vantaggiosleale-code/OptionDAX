@@ -76,8 +76,8 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
 
     useEffect(() => {
         if (structureId === 'new') {
-            // Apply defaults from user settings
-            const defaultMultiplier = userSettings?.defaultMultiplier || 5;
+            // Apply defaults: multiplier from general settings, greeks from user settings
+            const defaultMultiplier = settings.defaultMultiplier || 5;
             const defaultRiskFreeRate = userSettings?.defaultRiskFreeRate || '0.02';
             
             setLocalStructure({
