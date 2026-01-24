@@ -524,19 +524,38 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
                         <label htmlFor="structure-risk-free" className="text-sm font-medium text-gray-400">Tasso Risk-Free (%)</label>
                         <input
                             id="structure-risk-free"
-                            type="number"
-                            min="0"
-                            max="10"
-                            step="0.01"
+                            type="text"
+                            inputMode="decimal"
                             value={localStructure.riskFreeRate ? (parseFloat(localStructure.riskFreeRate) * 100).toFixed(2) : '2.00'}
                             onChange={(e) => {
-                                const percentValue = parseFloat(e.target.value);
-                                const decimalValue = (percentValue / 100).toFixed(4);
+                                let value = e.target.value;
+                                // Allow empty, digits, dot and comma
+                                if (value === '' || /^\d*[.,]?\d*$/.test(value)) {
+                                    // Replace comma with dot for parsing
+                                    const normalizedValue = value.replace(',', '.');
+                                    const percentValue = normalizedValue === '' ? 0 : parseFloat(normalizedValue);
+                                    // Clamp between 0 and 10
+                                    if (!isNaN(percentValue) && percentValue >= 0 && percentValue <= 10) {
+                                        const decimalValue = (percentValue / 100).toFixed(4);
+                                        updateStructureField('riskFreeRate', decimalValue);
+                                    } else if (normalizedValue === '' || normalizedValue === '.') {
+                                        // Allow empty or just dot during typing
+                                        updateStructureField('riskFreeRate', '0');
+                                    }
+                                }
+                            }}
+                            onBlur={(e) => {
+                                // Format on blur
+                                const value = e.target.value.replace(',', '.');
+                                const percentValue = value === '' || value === '.' ? 2 : parseFloat(value);
+                                const clamped = Math.max(0, Math.min(10, percentValue));
+                                const decimalValue = (clamped / 100).toFixed(4);
                                 updateStructureField('riskFreeRate', decimalValue);
                             }}
                             className={`mt-1 bg-gray-700 border border-gray-600 rounded-md px-3 py-2 w-full text-white focus:ring-2 focus:ring-accent focus:border-accent outline-none ${disabledClass}`}
                             disabled={isReadOnly}
-                            title="Tasso privo di rischio usato nei calcoli Black-Scholes (influisce su Rho)"
+                            title="Tasso privo di rischio usato nei calcoli Black-Scholes (influisce su Rho). Range: 0-10%"
+                            placeholder="2.00"
                         />
                     </div>
                     

@@ -724,3 +724,14 @@
 - [x] Aggiunto useTheme() e applicato colori dinamici (isDark ? dark : light)
 - [x] HMR applicato con successo
 - [ ] Test manuale: cliccare "Strutture Pubbliche", verificare testi leggibili in light e dark mode
+
+## Fix Input Tasso Risk-Free Incrementa Invece di Digitare (COMPLETATO)
+- [x] Trovato input "Tasso Risk-Free (%)" in StructureDetailView (righe 525-559)
+- [x] Cambiato da input type="number" con step a input type="text" con validazione regex
+- [x] Aggiunto inputMode="decimal" per tastiera numerica mobile
+- [x] Validazione regex /^\d*[.,]?\d*$/ accetta sia virgola che punto
+- [x] Normalizzazione automatica virgola → punto per parsing
+- [x] Clamp 0-10% durante digitazione
+- [x] Formattazione automatica su onBlur
+- [x] HMR applicato con successo
+- [ ] Test manuale: aprire struttura, digitare "3,25" nel campo risk-free, verificare funzionamento
