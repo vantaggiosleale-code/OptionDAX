@@ -3,9 +3,8 @@ import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useStructures } from '../hooks/useStructures';
 import { Structure, MarketData, CalculatedGreeks, Settings } from '../types';
 import { BlackScholes, getTimeToExpiry } from '../services/blackScholes';
-import { PlusIcon, ArchiveIcon, ScanIcon, PortfolioIcon, UploadIcon, EditIcon, TrashIcon, CloudDownloadIcon } from './icons';
-import ImageAnalysisModal from './ImageAnalysisModal';
-import HistoricalImportModal from './HistoricalImportModal';
+import { PlusIcon, ArchiveIcon, PortfolioIcon, EditIcon, TrashIcon, CloudDownloadIcon } from './icons';
+
 import { GraphicModal } from './GraphicModal';
 import useSettingsStore from '../store/settingsStore';
 import { useMarketDataStore } from '../stores/marketDataStore';
@@ -124,8 +123,6 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
     }, [daxPriceData, setMarketData]);
     
     // setCurrentView ora viene passata come prop da App.tsx
-    const [isAnalysisModalOpen, setIsAnalysisModalOpen] = useState(false);
-    const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
     const [isBulkEditMode, setIsBulkEditMode] = useState(false);
     const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
     const [graphicModalStructure, setGraphicModalStructure] = useState<{ id: number; tag: string; isClosed: boolean } | null>(null);
@@ -189,14 +186,7 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
 
     return (
         <>
-            <ImageAnalysisModal
-                isOpen={isAnalysisModalOpen}
-                onClose={() => setIsAnalysisModalOpen(false)}
-            />
-            <HistoricalImportModal
-                isOpen={isHistoryModalOpen}
-                onClose={() => setIsHistoryModalOpen(false)}
-            />
+
             <div 
                 className={`max-w-4xl mx-auto space-y-8 ${isBulkEditMode && selectedIds.size > 0 ? 'pb-24' : ''}`}
                 style={{
@@ -273,22 +263,6 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
                     <div className="flex flex-wrap gap-y-3 justify-between items-center mb-4">
                         <h1 className="text-2xl font-bold " style={{ color: textPrimary }}>Strutture Attive</h1>
                         <div className="flex items-center space-x-2">
-                             <button 
-                                onClick={() => setIsHistoryModalOpen(true)}
-                                className="flex items-center justify-center bg-gray-100 hover:bg-gray-100  font-semibold p-2 md:py-2 md:px-3 rounded-md transition" style={{ color: textPrimary }}
-                                title="Importa Storico da Immagini"
-                            >
-                                <UploadIcon />
-                                <span className="hidden md:inline ml-2">Importa Storico</span>
-                            </button>
-                             <button 
-                                onClick={() => setIsAnalysisModalOpen(true)}
-                                className="flex items-center justify-center bg-gray-100 hover:bg-gray-100  font-semibold p-2 md:py-2 md:px-3 rounded-md transition" style={{ color: textPrimary }}
-                                title="Carica Screenshot di un Trade"
-                            >
-                                <ScanIcon />
-                                <span className="hidden md:inline ml-2">Carica Screenshot</span>
-                            </button>
                             <button 
                                 onClick={() => setCurrentView('detail', 'new')}
                                 className="flex items-center justify-center bg-accent hover:bg-accent  font-semibold p-2 md:py-2 md:px-3 rounded-md transition" style={{ color: textPrimary }}

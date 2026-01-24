@@ -810,3 +810,9 @@
 - [x] Analizzare logica chiusura struttura nel router (procedure close)
 - [x] Modificare calcolo closingDate: usare max(leg.closingDate) invece di data odierna
 - [x] Testare che closingDate corrisponda all'ultima gamba chiusa
+
+## Rimozione Bottoni Inutilizzati da Dashboard
+- [x] Rimuovere bottone "Importa Storico" (riga 276-283 StructureListView.tsx)
+- [x] Rimuovere bottone "Carica Screenshot" (riga 284-291 StructureListView.tsx)
+- [x] Rimuovere stati isHistoryModalOpen e isAnalysisModalOpen
+- [x] Rimuovere import e riferimenti modali (file .tsx conservati per uso futuro)
