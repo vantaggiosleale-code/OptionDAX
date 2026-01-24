@@ -419,7 +419,7 @@ export const optionStructuresRouter = router({
       // Parse legs
       const legs = JSON.parse(structure.legs) as OptionLeg[];
 
-      const closingDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+      const todayDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
       let realizedPnl = 0;
 
       const updatedLegs = legs.map((leg) => {
@@ -469,9 +469,15 @@ export const optionStructuresRouter = router({
         return {
           ...leg,
           closingPrice: finalClosingPrice,
-          closingDate: leg.closingDate || closingDate,
+          closingDate: leg.closingDate || todayDate,
         };
       });
+
+      // Find the latest closing date among all legs
+      const latestClosingDate = updatedLegs.reduce((latest, leg) => {
+        if (!leg.closingDate) return latest;
+        return leg.closingDate > latest ? leg.closingDate : latest;
+      }, updatedLegs[0]?.closingDate || todayDate);
 
       // Update structure
       await db
@@ -479,7 +485,7 @@ export const optionStructuresRouter = router({
         .set({
           status: 'closed',
           legs: JSON.stringify(updatedLegs),
-          closingDate,
+          closingDate: latestClosingDate,
           realizedPnl: realizedPnl.toFixed(2),
         })
         .where(eq(structures.id, input.id));

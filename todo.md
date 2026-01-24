@@ -805,3 +805,8 @@
 - [x] Analizzare schema Zod nel router optionStructures per campo legs[].id
 - [x] Correggere tipo da string a union(string, number) per legs[].id
 - [x] Testare salvataggio strutture dopo fix
+
+## Fix closingDate Strutture Chiuse
+- [x] Analizzare logica chiusura struttura nel router (procedure close)
+- [x] Modificare calcolo closingDate: usare max(leg.closingDate) invece di data odierna
+- [x] Testare che closingDate corrisponda all'ultima gamba chiusa
