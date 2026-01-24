@@ -800,3 +800,8 @@
 - [x] Eliminare pagina intermedia "Caricamento struttura..." dopo click "Importa nel mio account"
 - [x] Reindirizzare direttamente alla Dashboard dopo importazione completata
 - [x] Testare flusso: click Importa → vedi subito struttura copiata in Dashboard
+
+## Fix Errore Salvataggio Strutture - Invalid Type legs[].id
+- [x] Analizzare schema Zod nel router optionStructures per campo legs[].id
+- [x] Correggere tipo da string a union(string, number) per legs[].id
+- [x] Testare salvataggio strutture dopo fix

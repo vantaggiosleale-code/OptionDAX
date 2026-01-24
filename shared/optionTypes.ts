@@ -31,7 +31,7 @@ export const optionLegSchema = z.object({
 
   // Optional metadata
   notes: z.string().optional(),
-  id: z.string().optional(), // Unique identifier for the leg
+  id: z.union([z.string(), z.number()]).optional(), // Unique identifier for the leg (string or number)
 });
 
 /**
