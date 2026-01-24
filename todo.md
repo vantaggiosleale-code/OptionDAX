@@ -648,3 +648,18 @@
 - [x] Light mode testato: nome NERO leggibile ✅
 - [ ] Dark mode da testare: cliccare toggle per verificare nome bianco
 - [ ] Salvare checkpoint
+
+## 📅 Data Apertura Gamba Default = Oggi (RICHIESTO)
+- [ ] Identificare funzione addLeg in StructureDetailView
+- [ ] Aggiungere openDate: new Date().toISOString().split('T')[0] al nuovo leg object
+- [ ] Testare: cliccare "Aggiungi Gamba" e verificare che data apertura sia pre-compilata con data odierna
+- [ ] Salvare checkpoint
+
+## 🎨 Fix Titolo "Dashboard di Performance" Storico (COMPLETATO)
+- [x] Identificato componente: PortfolioAnalysis.tsx (riga 152)
+- [x] Trovato titolo "Dashboard di Performance" con text-foreground (illeggibile)
+- [x] Applicato text-gray-900 dark:text-white + flex items-center gap-2
+- [x] Aggiunta icona TrendingUp (w-8 h-8) prima del titolo
+- [x] HMR applicato con successo
+- [ ] Testare light mode: cliccare "Storico" sidebar e verificare titolo nero scuro con icona
+- [ ] Salvare checkpoint

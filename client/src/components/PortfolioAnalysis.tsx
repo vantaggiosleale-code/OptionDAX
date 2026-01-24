@@ -149,7 +149,10 @@ const PortfolioAnalysis: React.FC = () => {
     return (
         <div className="max-w-7xl mx-auto">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold text-foreground">Dashboard di Performance</h1>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                    <TrendingUp className="w-8 h-8" />
+                    Dashboard di Performance
+                </h1>
             </div>
             <div className="space-y-8">
                  <div className="bg-white rounded-lg p-4">
