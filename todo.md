@@ -768,3 +768,12 @@
 - [x] Aumentata larghezza colonne da sm:w-24 a sm:w-32 per accomodare testo più lungo
 - [x] Testato in Dashboard: Theta mostra "-15.18 (€-75.89)", Vega mostra "53.33 (€266.65)"
 - [x] HMR applicato con successo
+
+## Layout Due Righe Theta e Vega in Dashboard (COMPLETATO)
+- [x] Modificato layout Theta e Vega in StructureListView per forzare sempre due righe
+- [x] Riga 1: valore in punti (es. "-15.18", "53.33")
+- [x] Riga 2: valore in euro tra parentesi con text-sm (es. "(€-75.90)", "(€266.63)")
+- [x] Sostituito <p> con <div> contenitore e due <div> figli per forzare break di riga
+- [x] Testato con valori corti e lunghi: layout consistente su due righe
+- [x] StructureDetailView (tabella dettagliata) mantiene Theta e Vega SOLO in euro come richiesto
+- [x] HMR applicato con successo

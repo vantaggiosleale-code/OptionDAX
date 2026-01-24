@@ -339,15 +339,17 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
                                             </div>
                                             <div className="sm:w-32">
                                                 <span className="text-xs  block" style={{ color: textSecondary }}>Θ Theta</span>
-                                                <p className="" style={{ color: textPrimary }}>
-                                                    {totalGreeks.theta.toFixed(2)} (€{(totalGreeks.theta * structure.multiplier).toFixed(2)})
-                                                </p>
+                                                <div className="" style={{ color: textPrimary }}>
+                                                    <div>{totalGreeks.theta.toFixed(2)}</div>
+                                                    <div className="text-sm">(€{(totalGreeks.theta * structure.multiplier).toFixed(2)})</div>
+                                                </div>
                                             </div>
                                             <div className="sm:w-32">
                                                 <span className="text-xs  block" style={{ color: textSecondary }}>ν Vega</span>
-                                                <p className="" style={{ color: textPrimary }}>
-                                                    {totalGreeks.vega.toFixed(2)} (€{(totalGreeks.vega * structure.multiplier).toFixed(2)})
-                                                </p>
+                                                <div className="" style={{ color: textPrimary }}>
+                                                    <div>{totalGreeks.vega.toFixed(2)}</div>
+                                                    <div className="text-sm">(€{(totalGreeks.vega * structure.multiplier).toFixed(2)})</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
