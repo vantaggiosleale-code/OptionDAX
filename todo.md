@@ -706,3 +706,15 @@
 - [x] Defaults applicati anche alle nuove gambe (addLeg usa defaultVolatility)
 - [x] Test vitest passati (4/4) - userSettings.test.ts
 - [ ] Test manuale: modificare defaults in Impostazioni, creare nuova struttura, verificare valori applicati
+
+## Marketplace Strutture Pubbliche (COMPLETATO)
+- [x] Query tRPC listPublic già esistente in optionStructuresRouter (righe 543-570)
+- [x] Mutation tRPC import già esistente in optionStructuresRouter (righe 575-636)
+- [x] Struttura importata è copia indipendente (campo originalStructureId traccia l'originale)
+- [x] Componente PublicStructuresView già esistente e completo
+- [x] Card mostrano: tag, status, greche (se attiva), P&L (se chiusa), pulsante "Importa"
+- [x] Aggiunta voce "🌐 Strutture Pubbliche" nella sidebar (Sidebar.tsx)
+- [x] Routing già configurato in App.tsx (view 'public')
+- [x] Test vitest passati (7/7) - marketplace.test.ts
+- [x] Test coprono: listPublic, import, togglePublic (admin only)
+- [ ] Test manuale: cliccare "Strutture Pubbliche" in sidebar, verificare lista e importazione
