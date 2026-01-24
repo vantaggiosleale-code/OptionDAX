@@ -281,7 +281,7 @@ const PayoffChart: React.FC<PayoffChartProps> = ({ legs, marketData, multiplier 
 
   return (
     <div className="relative w-full h-full">
-        <div className="absolute top-0 right-0 z-10 flex flex-col items-end pointer-events-auto">
+        <div className="absolute top-16 right-0 z-10 flex flex-col items-end pointer-events-auto">
             <button
                 onClick={() => setXDomain(initialXDomain)}
                 className="px-2 py-1 text-xs rounded-bl-md border"

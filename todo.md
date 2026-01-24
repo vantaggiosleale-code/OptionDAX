@@ -777,3 +777,9 @@
 - [x] Testato con valori corti e lunghi: layout consistente su due righe
 - [x] StructureDetailView (tabella dettagliata) mantiene Theta e Vega SOLO in euro come richiesto
 - [x] HMR applicato con successo
+
+## Fix Overlap Pulsanti Zoom con Logout (COMPLETATO)
+- [x] Trovati pulsanti zoom in PayoffChart (riga 284)
+- [x] Cambiato top-0 → top-16 (64px dall'alto) per abbassare pulsanti zoom
+- [x] HMR applicato con successo
+- [ ] Test manuale: aprire struttura, cliccare "Genera Grafica", verificare pulsanti zoom non coprano Logout
