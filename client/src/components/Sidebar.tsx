@@ -21,7 +21,7 @@ export function Sidebar({ currentView, onNavigate, isOpen = false }: SidebarProp
 
   return (
     <aside 
-      className={`fixed left-0 top-0 h-screen w-64 border-r flex flex-col z-60 transition-transform duration-300 shadow-lg ${
+      className={`fixed left-0 top-0 h-screen w-64 border-r flex flex-col z-60 transition-transform duration-300 shadow-lg pt-16 md:pt-0 ${
         isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
       }`}
       style={{

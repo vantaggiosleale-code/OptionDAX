@@ -754,3 +754,9 @@
 - [x] Logo visibile in alto a sinistra sidebar
 - [x] HMR applicato con successo
 - [ ] Test manuale: verificare rendering logo in light e dark mode
+
+## Fix Sidebar Mobile Logo Nascosto (COMPLETATO)
+- [x] Aggiunto padding-top 64px (pt-16) alla sidebar solo su mobile
+- [x] Desktop mantiene comportamento normale (md:pt-0)
+- [x] HMR applicato con successo
+- [ ] Test manuale: aprire sidebar su mobile, verificare logo visibile sotto barra browser
