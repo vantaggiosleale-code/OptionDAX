@@ -820,3 +820,7 @@
 ## Rendere Bianco Testo h3 in StructureDetailView
 - [x] Aggiungere text-white a h3 riga 768 "Analisi P&L"
 - [x] Aggiungere text-white a h3 riga 835 "Analisi Greche (Gambe Aperte)"
+
+## Fix Missing Key Props in StructureDetailView
+- [x] Aggiungere id: leg.id al mapping delle gambe nel handleSave()
+- [x] Verificare che tutti i .map() abbiano key unici e stabili

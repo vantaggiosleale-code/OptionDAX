@@ -243,6 +243,7 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
             } else {
                 // Usa direttamente la mutation tRPC invece di addStructure
                 const mappedLegs = structureToSave.legs.map(leg => ({
+                    id: leg.id,
                     optionType: leg.optionType,
                     strike: leg.strike,
                     expiryDate: leg.expiryDate,
