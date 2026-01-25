@@ -816,3 +816,7 @@
 - [x] Rimuovere bottone "Carica Screenshot" (riga 284-291 StructureListView.tsx)
 - [x] Rimuovere stati isHistoryModalOpen e isAnalysisModalOpen
 - [x] Rimuovere import e riferimenti modali (file .tsx conservati per uso futuro)
+
+## Rendere Bianco Testo h3 in StructureDetailView
+- [x] Aggiungere text-white a h3 riga 768 "Analisi P&L"
+- [x] Aggiungere text-white a h3 riga 835 "Analisi Greche (Gambe Aperte)"

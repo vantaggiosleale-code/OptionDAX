@@ -765,7 +765,7 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="overflow-x-auto">
-                            <h3 className="text-lg font-bold mb-2">Analisi P&L</h3>
+                            <h3 className="text-lg font-bold mb-2 text-white">Analisi P&L</h3>
                             <table className="w-full text-sm text-left">
                                 <thead className="text-xs text-gray-400 uppercase bg-gray-700">
                                     <tr>
@@ -832,7 +832,7 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
                             </table>
                         </div>
                         <div className="overflow-x-auto">
-                            <h3 className="text-lg font-bold mb-2">Analisi Greche (Gambe Aperte)</h3>
+                            <h3 className="text-lg font-bold mb-2 text-white">Analisi Greche (Gambe Aperte)</h3>
                             <table className="w-full text-sm text-left">
                                 <thead className="text-xs text-gray-400 uppercase bg-gray-700">
                                     <tr>
