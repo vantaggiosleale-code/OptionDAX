@@ -869,3 +869,17 @@
 - [ ] Aggiungere badge rosso con numero account in sospeso
 - [ ] Badge visibile nella sidebar per quick access
 - [ ] Implementare logica approvazione/rifiuto con notifiche email all'utente
+
+
+## Sistema Approvazione Account e Notifiche Email (COMPLETATO)
+- [x] Implementare tRPC procedure approveUser per approvare account
+- [x] Implementare tRPC procedure rejectUser per rifiutare account
+- [x] Implementare tRPC procedure getPendingUsers per lista account in sospeso
+- [x] Configurare helper sendEmail per notifiche utenti
+- [x] Implementare email notifica quando utente si iscrive (a admin)
+- [x] Implementare email notifica quando account approvato (a utente)
+- [x] Implementare email notifica quando account rifiutato (a utente)
+- [x] Creare componente ApprovalsView per pannello admin
+- [x] Integrare ApprovalsView nel DashboardLayout
+- [x] Aggiungere badge rosso con contatore account in sospeso
+- [x] Testare flusso completo approvazione

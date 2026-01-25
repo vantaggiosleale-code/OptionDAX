@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { 
   InsertUser, 
@@ -13,7 +13,9 @@ import {
   riskAlerts,
   InsertRiskAlert,
   uploadedFiles,
-  InsertUploadedFile
+  InsertUploadedFile,
+  approvalRequests,
+  InsertApprovalRequest
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -270,4 +272,80 @@ export async function deleteFile(id: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   return await db.delete(uploadedFiles).where(eq(uploadedFiles.id, id));
+}
+
+
+// Approval requests queries
+export async function createApprovalRequest(request: InsertApprovalRequest) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.insert(approvalRequests).values(request);
+}
+
+export async function getPendingApprovals() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select()
+    .from(approvalRequests)
+    .innerJoin(users, eq(approvalRequests.userId, users.id))
+    .where(eq(approvalRequests.status, 'pending'))
+    .orderBy(approvalRequests.createdAt);
+}
+
+export async function getApprovalRequestByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select()
+    .from(approvalRequests)
+    .where(eq(approvalRequests.userId, userId))
+    .limit(1);
+  return result[0];
+}
+
+export async function approveUser(userId: number, approvedBy: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Update approval_requests table
+  await db.update(approvalRequests)
+    .set({
+      status: 'approved',
+      approvedBy,
+      approvalDate: new Date(),
+    })
+    .where(eq(approvalRequests.userId, userId));
+  
+  // Update users table status
+  return await db.update(users)
+    .set({ status: 'approved' })
+    .where(eq(users.id, userId));
+}
+
+export async function rejectUser(userId: number, approvedBy: number, rejectionReason?: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Update approval_requests table
+  await db.update(approvalRequests)
+    .set({
+      status: 'rejected',
+      approvedBy,
+      approvalDate: new Date(),
+      rejectionReason: rejectionReason || null,
+    })
+    .where(eq(approvalRequests.userId, userId));
+  
+  // Update users table status
+  return await db.update(users)
+    .set({ status: 'rejected' })
+    .where(eq(users.id, userId));
+}
+
+export async function getPendingApprovalsCount() {
+  const db = await getDb();
+  if (!db) return 0;
+  const result = await db.select()
+    .from(approvalRequests)
+    .where(eq(approvalRequests.status, 'pending'));
+  return result.length;
 }

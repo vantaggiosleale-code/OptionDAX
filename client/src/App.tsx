@@ -17,14 +17,15 @@ import PayoffSimulator from './components/PayoffSimulator';
 import GreeksCalculator from './components/GreeksCalculator';
 import { useTheme } from './contexts/ThemeContext';
 import { LandingPage } from './pages/LandingPage';
+import { ApprovalsView } from './components/ApprovalsView';
 // History.tsx rimosso - sostituito con PortfolioAnalysis
 
 const App: React.FC = () => {
-    const [currentView, setCurrentView] = React.useState<'dashboard' | 'payoff' | 'greeks' | 'history' | 'settings' | 'detail' | 'analysis' | 'public' | 'test'>('dashboard');
+    const [currentView, setCurrentView] = React.useState<'dashboard' | 'payoff' | 'greeks' | 'history' | 'settings' | 'detail' | 'analysis' | 'public' | 'test' | 'approvals'>('dashboard');
     const [currentStructureId, setCurrentStructureId] = React.useState<number | 'new' | null>(null);
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
     
-    const handleSetCurrentView = (view: 'dashboard' | 'payoff' | 'greeks' | 'history' | 'settings' | 'detail' | 'analysis' | 'public' | 'test', structureId?: number | 'new' | null) => {
+    const handleSetCurrentView = (view: 'dashboard' | 'payoff' | 'greeks' | 'history' | 'settings' | 'detail' | 'analysis' | 'public' | 'test' | 'approvals', structureId?: number | 'new' | null) => {
         setCurrentView(view);
         if (structureId !== undefined) {
             setCurrentStructureId(structureId);
@@ -41,6 +42,11 @@ const App: React.FC = () => {
     };
     const { user, loading, isAuthenticated, logout } = useAuth();
     const { theme } = useTheme();
+    
+    // Fetch pending approvals count for badge
+    const { data: pendingCount = 0 } = trpc.approvals.getPendingCount.useQuery(undefined, {
+        enabled: user?.role === 'admin',
+    });
     
     // Show landing page if user is not authenticated OR if authenticated but status is 'pending'
     const showLandingPage = !isAuthenticated || (user?.status === 'pending');
@@ -70,6 +76,8 @@ const App: React.FC = () => {
                 return <PublicStructuresView setCurrentView={handleSetCurrentView} />;
             case 'test':
                 return <SimpleGraphicTest />;
+            case 'approvals':
+                return <ApprovalsView />;
             default:
                 return <StructureListView setCurrentView={handleSetCurrentView} />;
         }
@@ -90,7 +98,7 @@ const App: React.FC = () => {
         >
             {/* Sidebar */}
             {isAuthenticated && (
-                <Sidebar currentView={currentView} onNavigate={(view) => { handleNavigate(view); setIsSidebarOpen(false); }} isOpen={isSidebarOpen} />
+                <Sidebar currentView={currentView} onNavigate={(view) => { handleNavigate(view); setIsSidebarOpen(false); }} isOpen={isSidebarOpen} isAdmin={user?.role === 'admin'} pendingCount={pendingCount} />
             )}
             
             {/* Main Content */}

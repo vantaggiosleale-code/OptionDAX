@@ -1,23 +1,28 @@
-import { LayoutDashboard, TrendingUp, Calculator, History, Settings, Sun, Moon, Globe } from 'lucide-react';
+import { LayoutDashboard, TrendingUp, Calculator, History, Settings, Sun, Moon, Globe, CheckCircle } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface SidebarProps {
   currentView: string;
   onNavigate: (view: string) => void;
   isOpen?: boolean;
+  isAdmin?: boolean;
+  pendingCount?: number;
 }
 
-export function Sidebar({ currentView, onNavigate, isOpen = false }: SidebarProps) {
+export function Sidebar({ currentView, onNavigate, isOpen = false, isAdmin = false, pendingCount = 0 }: SidebarProps) {
   const { theme, toggleTheme } = useTheme();
   
-  const navItems = [
+  const baseNavItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'payoff', label: 'Simulatore Payoff', icon: TrendingUp },
     { id: 'greeks', label: 'Calcolatore Greche', icon: Calculator },
     { id: 'history', label: 'Storico', icon: History },
     { id: 'public', label: 'Strutture Pubbliche', icon: Globe },
-    { id: 'settings', label: 'Impostazioni', icon: Settings },
   ];
+  
+  const navItems = isAdmin 
+    ? [...baseNavItems, { id: 'approvals', label: 'Approvazioni', icon: CheckCircle, badge: pendingCount > 0 ? pendingCount : undefined }, { id: 'settings', label: 'Impostazioni', icon: Settings }]
+    : [...baseNavItems, { id: 'settings', label: 'Impostazioni', icon: Settings }];
 
   return (
     <aside 
@@ -59,7 +64,7 @@ export function Sidebar({ currentView, onNavigate, isOpen = false }: SidebarProp
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-1">
-        {navItems.map((item) => {
+        {navItems.map((item: any) => {
           const Icon = item.icon;
           const isActive = currentView === item.id;
           
@@ -69,7 +74,7 @@ export function Sidebar({ currentView, onNavigate, isOpen = false }: SidebarProp
               onClick={() => onNavigate(item.id)}
               className={`
                 w-full flex items-center gap-3 px-4 py-3 rounded-lg
-                transition-all duration-200
+                transition-all duration-200 relative
                 ${isActive ? 'bg-blue-50 font-medium' : 'hover:bg-gray-100'}
               `}
               style={{
@@ -83,6 +88,11 @@ export function Sidebar({ currentView, onNavigate, isOpen = false }: SidebarProp
             >
               <Icon className="w-5 h-5" />
               <span className="text-sm">{item.label}</span>
+              {item.badge && (
+                <span className="ml-auto inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-600 rounded-full">
+                  {item.badge}
+                </span>
+              )}
             </button>
           );
         })}
