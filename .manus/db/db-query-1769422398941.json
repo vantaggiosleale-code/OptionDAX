@@ -1,0 +1,25 @@
+{
+  "query": "SELECT email, status, role FROM users WHERE email IN (\n    'vantaggiosleale@gmail.com',\n    'andrea.vaturi@gmail.com',\n    'chiara.babini@gmail.com',\n    'mirko.castignani@gmail.com',\n    'andrea.pula@gmail.com'\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3oHtB2ru8zC82QY.root --database K4zM37evGzfMf8m3Ckfnqp --execute SELECT email, status, role FROM users WHERE email IN (\n    'vantaggiosleale@gmail.com',\n    'andrea.vaturi@gmail.com',\n    'chiara.babini@gmail.com',\n    'mirko.castignani@gmail.com',\n    'andrea.pula@gmail.com'\n);",
+  "rows": [
+    {
+      "email": "vantaggiosleale@gmail.com",
+      "status": "approved",
+      "role": "admin"
+    },
+    {
+      "email": "andrea.vaturi@gmail.com",
+      "status": "approved",
+      "role": "admin"
+    },
+    {
+      "email": "mirko.castignani@gmail.com",
+      "status": "approved",
+      "role": "admin"
+    }
+  ],
+  "messages": [],
+  "stdout": "email\tstatus\trole\nvantaggiosleale@gmail.com\tapproved\tadmin\nandrea.vaturi@gmail.com\tapproved\tadmin\nmirko.castignani@gmail.com\tapproved\tadmin\n",
+  "stderr": "",
+  "execution_time_ms": 91
+}

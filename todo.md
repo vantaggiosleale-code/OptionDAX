@@ -883,3 +883,17 @@
 - [x] Integrare ApprovalsView nel DashboardLayout
 - [x] Aggiungere badge rosso con contatore account in sospeso
 - [x] Testare flusso completo approvazione
+
+
+## Pagina Attesa Approvazione Account (IN PROGRESS)
+- [ ] Creare componente PendingApprovalPage con messaggio chiaro
+- [ ] Aggiungere auto-refresh ogni 10 secondi per verificare approvazione
+- [ ] Integrare PendingApprovalPage in App.tsx
+- [ ] Testare flusso: registrazione → pending → approvazione → accesso dashboard
+
+
+## Fix Flusso Approvazione Utenti (COMPLETATO)
+- [x] Aggiunto loading state per evitare mostrare landing page durante caricamento dati
+- [x] Modificato sameSite cookie da "none" a "lax" per compatibilità domini custom
+- [x] Implementare invio email notifica quando admin approva utente (già implementato)
+- [ ] Testare flusso completo dopo pubblicazione: registrazione → pending page → approvazione → email → accesso dashboard

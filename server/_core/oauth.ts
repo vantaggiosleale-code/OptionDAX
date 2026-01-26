@@ -44,6 +44,7 @@ export function registerOAuthRoutes(app: Express) {
       const cookieOptions = getSessionCookieOptions(req);
       res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
 
+      // Redirect alla home (il frontend rileverà il nuovo login dal cookie)
       res.redirect(302, "/");
     } catch (error) {
       console.error("[OAuth] Callback failed", error);

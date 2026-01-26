@@ -1,0 +1,52 @@
+{
+  "query": "SELECT id, email, name, status, role FROM users ORDER BY id;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3oHtB2ru8zC82QY.root --database K4zM37evGzfMf8m3Ckfnqp --execute SELECT id, email, name, status, role FROM users ORDER BY id;",
+  "rows": [
+    {
+      "id": "1",
+      "email": "vantaggiosleale@gmail.com",
+      "name": "Vantaggio Sleale",
+      "status": "approved",
+      "role": "admin"
+    },
+    {
+      "id": "60013",
+      "email": "andrea.vaturi@gmail.com",
+      "name": "Andrea Vaturi",
+      "status": "approved",
+      "role": "admin"
+    },
+    {
+      "id": "270107",
+      "email": "mirko.castignani@gmail.com",
+      "name": "Mirko Castignani",
+      "status": "approved",
+      "role": "admin"
+    },
+    {
+      "id": "900007",
+      "email": "cbabini20142@gmail.com",
+      "name": "Chiara B.",
+      "status": "approved",
+      "role": "user"
+    },
+    {
+      "id": "1050001",
+      "email": "alberto.carde@gmail.com",
+      "name": "Alberto Cardellino",
+      "status": "approved",
+      "role": "user"
+    },
+    {
+      "id": "1140001",
+      "email": "opzionetika@gmail.com",
+      "name": "Opzionetika Trading",
+      "status": "approved",
+      "role": "user"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\temail\tname\tstatus\trole\n1\tvantaggiosleale@gmail.com\tVantaggio Sleale\tapproved\tadmin\n60013\tandrea.vaturi@gmail.com\tAndrea Vaturi\tapproved\tadmin\n270107\tmirko.castignani@gmail.com\tMirko Castignani\tapproved\tadmin\n900007\tcbabini20142@gmail.com\tChiara B.\tapproved\tuser\n1050001\talberto.carde@gmail.com\tAlberto Cardellino\tapproved\tuser\n1140001\topzionetika@gmail.com\tOpzionetika Trading\tapproved\tuser\n",
+  "stderr": "",
+  "execution_time_ms": 59
+}

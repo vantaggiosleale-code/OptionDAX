@@ -17,6 +17,7 @@ import PayoffSimulator from './components/PayoffSimulator';
 import GreeksCalculator from './components/GreeksCalculator';
 import { useTheme } from './contexts/ThemeContext';
 import { LandingPage } from './pages/LandingPage';
+import { PendingApprovalPage } from './pages/PendingApprovalPage';
 import { ApprovalsView } from './components/ApprovalsView';
 // History.tsx rimosso - sostituito con PortfolioAnalysis
 
@@ -40,7 +41,7 @@ const App: React.FC = () => {
             handleSetCurrentView(view as any);
         }
     };
-    const { user, loading, isAuthenticated, logout } = useAuth();
+    const { user, loading, isAuthenticated, logout, refresh } = useAuth();
     const { theme } = useTheme();
     
     // Fetch pending approvals count for badge
@@ -48,8 +49,20 @@ const App: React.FC = () => {
         enabled: user?.role === 'admin',
     });
     
-    // Show landing page if user is not authenticated OR if authenticated but status is 'pending'
-    const showLandingPage = !isAuthenticated || (user?.status === 'pending');
+    // Show loading while checking authentication
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+                <div className="text-white text-xl">Caricamento...</div>
+            </div>
+        );
+    }
+    
+    // Show pending approval page if authenticated but status is 'pending'
+    const showPendingApprovalPage = isAuthenticated && user?.status === 'pending';
+    
+    // Show landing page if user is not authenticated
+    const showLandingPage = !isAuthenticated;
 
     const handleLogout = async () => {
         await logout();
@@ -83,9 +96,14 @@ const App: React.FC = () => {
         }
     }
 
-    // Show landing page instead of app if user is not authenticated or pending approval
+    // Show landing page if user is not authenticated
     if (showLandingPage) {
         return <LandingPage />;
+    }
+    
+    // Show pending approval page if authenticated but status is 'pending'
+    if (showPendingApprovalPage) {
+        return <PendingApprovalPage />;
     }
 
     return (
