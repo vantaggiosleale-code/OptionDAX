@@ -93,8 +93,8 @@ export function ApprovalsView() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2 mb-6">
-        <AlertCircle className="w-5 h-5 text-yellow-500" />
-        <h2 className="text-xl font-bold text-white">
+        <CheckCircle2 className="w-5 h-5 text-green-500" />
+        <h2 className="text-xl font-bold text-muted-foreground">
           Richieste di Approvazione ({pendingUsers.length})
         </h2>
       </div>
