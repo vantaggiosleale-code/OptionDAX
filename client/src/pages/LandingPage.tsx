@@ -17,8 +17,12 @@ export function LandingPage() {
       <div className="w-full max-w-md">
         {/* Logo Section */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 mb-6 shadow-lg">
-            <span className="text-4xl font-bold text-white">DAX</span>
+          <div className="inline-flex items-center justify-center mb-6">
+            <img 
+              src="/logo-landing.png" 
+              alt="Option DAX Logo" 
+              className="w-auto max-w-sm h-auto"
+            />
           </div>
           <h1 className="text-4xl font-bold text-white mb-2">Option DAX</h1>
           <p className="text-slate-400 text-lg">Trading Options Analytics</p>

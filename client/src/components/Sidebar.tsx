@@ -43,9 +43,9 @@ export function Sidebar({ currentView, onNavigate, isOpen = false, isAdmin = fal
       >
         <div className="flex items-center gap-3">
           <img 
-            src="/juventus-logo.png" 
-            alt="Juventus Logo" 
-            className="w-auto h-11"
+            src="/logo-header.png" 
+            alt="Option DAX Logo" 
+            className="w-auto h-10"
           />
           <h1 
             className="text-xl font-bold antialiased"

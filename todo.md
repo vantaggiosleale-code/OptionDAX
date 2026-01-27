@@ -905,3 +905,9 @@
 - [ ] Testare che pannello Approvazioni mostri nuovi utenti (dopo pubblicazione)
 - [ ] Testare che badge rosso appaia con contatore corretto (dopo pubblicazione)
 - [ ] Testare invio email quando admin approva dal pannello (dopo pubblicazione)
+
+## Sostituzione Logo Option DAX
+- [x] Processare immagine logo per creare versioni ottimizzate (favicon, header, landing)
+- [x] Sostituire logo Juventus con logo Option DAX in sidebar/header
+- [x] Sostituire favicon (icona tab browser) con logo Option DAX
+- [x] Sostituire logo nella landing page con logo Option DAX
