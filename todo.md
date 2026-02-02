@@ -926,3 +926,6 @@
 
 ## Fix Estetica Header Proposte
 - [x] Adattare colori header ProposteView al tema light/dark (bianco in light, blu scuro in dark)
+
+## Fix Header Light Mode Proposte
+- [x] Sistemare colori header ProposteView in light mode (sfondo bianco, testo nero)
