@@ -237,6 +237,14 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
         
         // Leggi valore da input uncontrolled
         const tagValue = tagInputRef.current?.value || '';
+        
+        // Validazione: Tag Struttura obbligatorio
+        if (!tagValue || tagValue.trim().length === 0) {
+            alert('⚠️ Errore: Il campo "Tag Struttura" è obbligatorio.\n\nInserisci un nome per identificare questa struttura prima di salvare.');
+            tagInputRef.current?.focus();
+            return;
+        }
+        
         const structureToSave = { ...localStructure, tag: tagValue };
         
         try {
@@ -746,7 +754,7 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
                                                         spotPrice: marketData.daxSpot,
                                                         strikePrice: leg.strike,
                                                         timeToExpiry,
-                                                        riskFreeRate: percentToDecimal(riskFreeRate),
+                                                        riskFreeRate: riskFreeRate, // Già in formato decimale (0.02)
                                                         optionType: leg.optionType === 'Call' ? 'call' : 'put'
                                                     });
                                                     calculatedIV = ivResult.impliedVolatility;

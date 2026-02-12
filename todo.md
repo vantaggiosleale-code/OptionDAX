@@ -984,3 +984,24 @@
 - [x] Verificato che P&L posizioni aperte è realistico (€42.05 per 2DD01)
 - [x] Verificato che gamba chiusa mostra "VI non applicabile"
 - [ ] Documentare workflow: aggiornare VI default quando cambia regime volatilità
+
+## Bug Validazione Tag Struttura (URGENT)
+- [x] Aggiungere validazione frontend per campo Tag Struttura obbligatorio
+- [x] Mostrare messaggio di errore chiaro se utente prova a salvare con tag vuoto
+- [x] Impedire invio al backend se tag è vuoto
+- [ ] Testare validazione su nuove strutture e modifiche esistenti
+
+## Bug Differenza Calcolo Volatilità Implicita (URGENT)
+- [ ] Analizzare funzione calculateImpliedVolatility del calcolatore di riferimento
+- [ ] Confrontare con implementazione Option DAX
+- [ ] Identificare differenza nel calcolo Time to Expiry o Newton-Raphson
+- [ ] Correggere implementazione Option DAX
+- [ ] Testare con caso: S=25003, K=25100, price=405, scadenza=20/03/2026, valutazione=12/02/2026
+- [ ] Verificare che VI calcolata sia 13.67% (come riferimento) invece di 14.52%
+
+## Bug Correzione Risk-Free Rate nel Calcolo VI (COMPLETATO)
+- [x] Identificato bug: riskFreeRate veniva diviso per 100 due volte (0.02 → 0.0002)
+- [x] Rimossa chiamata percentToDecimal() nel calcolo VI (già in formato decimale)
+- [x] Testato che riskFreeRate sia ora corretto (0.02 invece di 0.0002)
+- [x] Rimossi console.log di debug
+- [x] Verificato che VI calcolata sia più accurata (differenza residua dovuta a Spot DAX diverso)
