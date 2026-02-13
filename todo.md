@@ -1012,3 +1012,9 @@
 - [x] Soluzione: Modificato calculatedGreeks e calculatedPnl per usare userSettings.defaultVolatility invece di leg.impliedVolatility
 - [x] Modifiche: client/src/components/StructureDetailView.tsx righe 329 e 393
 - [x] Risultato: Ora Prezzo Teorico, Greche e P&L si aggiornano tutti insieme quando cambi VI default
+
+## 🔴 BUG UI: Sidebar trasparente su mobile (RISOLTO)
+- [x] Problema: Sidebar mobile è trasparente e si sovrappone al contenuto sottostante (grafici, pulsanti, testo)
+- [x] Causa: Mancava classe Tailwind bg-white/dark:bg-gray-900 come fallback per sfondo opaco
+- [x] Soluzione: Aggiunto bg-white dark:bg-gray-900 alla classe sidebar (riga 30 Sidebar.tsx)
+- [x] Risultato: Sidebar ora ha sfondo bianco opaco in light mode e grigio scuro in dark mode
