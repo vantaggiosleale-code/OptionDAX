@@ -27,11 +27,13 @@ export function Sidebar({ currentView, onNavigate, isOpen = false, isAdmin = fal
 
   return (
     <aside 
-      className={`fixed left-0 top-0 h-screen w-64 border-r flex flex-col z-60 transition-transform duration-300 shadow-lg pt-16 md:pt-0 bg-white dark:bg-gray-900 ${
+      className={`fixed left-0 top-0 h-screen w-64 border-r flex flex-col z-60 transition-transform duration-300 shadow-lg pt-16 md:pt-0 ${
         isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
       }`}
       style={{
+        backgroundColor: theme === 'light' ? 'rgb(255, 255, 255)' : 'rgb(17, 24, 39)',
         borderColor: theme === 'light' ? '#e5e7eb' : '#1f2937',
+        opacity: 1,
       }}
     >
       {/* Logo */}

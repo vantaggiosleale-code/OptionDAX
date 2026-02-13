@@ -1014,8 +1014,9 @@
 - [x] Risultato: Ora Prezzo Teorico, Greche e P&L si aggiornano tutti insieme quando cambi VI default
 
 ## 🔴 BUG UI: Sidebar trasparente su mobile (RISOLTO)
-- [x] Tentativo 1: Aggiunto bg-white dark:bg-gray-900 - NON FUNZIONAVA (style inline sovrascriveva)
-- [x] Problema: Style inline backgroundColor sovrascriveva classi Tailwind
-- [x] Soluzione: Rimosso backgroundColor da style inline (riga 33-35 Sidebar.tsx)
-- [x] Risultato: Sidebar ora completamente opaca - bg-white in light mode, bg-gray-900 in dark mode
-- [x] Test: Verificato su desktop - sidebar nera opaca in dark mode, nessuna trasparenza
+- [x] Tentativo 1: Aggiunto bg-white dark:bg-gray-900 - NON FUNZIONAVA (inline style sovrascriveva)
+- [x] Tentativo 2: Rimosso backgroundColor inline - PEGGIORATO (testo invisibile, ancora trasparente)
+- [x] Tentativo 3: Ripristinato backgroundColor con rgb() e opacity: 1 - FUNZIONA!
+- [x] Soluzione: Usare rgb(255, 255, 255) per light e rgb(17, 24, 39) per dark con opacity: 1
+- [x] Risultato: Sidebar completamente opaca in entrambi i temi, testo perfettamente leggibile
+- [x] Test: Verificato su desktop light mode - sidebar bianca opaca, nessuna trasparenza
