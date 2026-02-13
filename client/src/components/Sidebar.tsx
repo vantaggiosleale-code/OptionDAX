@@ -31,7 +31,6 @@ export function Sidebar({ currentView, onNavigate, isOpen = false, isAdmin = fal
         isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
       }`}
       style={{
-        backgroundColor: theme === 'light' ? '#ffffff' : '#111827',
         borderColor: theme === 'light' ? '#e5e7eb' : '#1f2937',
       }}
     >
