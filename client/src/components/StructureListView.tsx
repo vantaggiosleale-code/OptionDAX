@@ -243,22 +243,22 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
                                 </span>
                                 Spot DAX:
                             </div>
-                            <div className="flex items-center bg-gray-100 border border-gray-200 rounded-md text-sm">
-                                <button onClick={() => handleSpotStep(-10)} className="px-2 py-1  hover:bg-gray-100 rounded-l-md font-mono" style={{ color: textSecondary }}>-10</button>
-                                <button onClick={() => handleSpotStep(-1)} className="px-2 py-1  hover:bg-gray-100 border-l border-r border-gray-200 font-mono" style={{ color: textSecondary }}>-1</button>
+                            <div className="flex items-center rounded-md text-sm" style={{ backgroundColor: theme === 'light' ? '#f3f4f6' : '#1f2937', borderColor: borderColor, borderWidth: '1px' }}>
+                                <button onClick={() => handleSpotStep(-10)} className="px-2 py-1 rounded-l-md font-mono hover:opacity-80" style={{ color: textSecondary }}>-10</button>
+                                <button onClick={() => handleSpotStep(-1)} className="px-2 py-1 font-mono hover:opacity-80" style={{ color: textSecondary, borderLeft: `1px solid ${borderColor}`, borderRight: `1px solid ${borderColor}` }}>-1</button>
                                 <input
                                     type="number"
                                     value={marketData.daxSpot}
                                     onChange={handleSpotChange}
-                                    className="bg-transparent w-24 text-center  font-mono focus:outline-none" style={{ color: textPrimary }}
+                                    className="bg-transparent w-24 text-center font-mono focus:outline-none" style={{ color: textPrimary }}
                                     step="0.01"
                                 />
-                                <button onClick={() => handleSpotStep(1)} className="px-2 py-1  hover:bg-gray-100 border-l border-r border-gray-200 font-mono" style={{ color: textSecondary }}>+1</button>
-                                <button onClick={() => handleSpotStep(10)} className="px-2 py-1  hover:bg-gray-100 border-r border-gray-200 font-mono" style={{ color: textSecondary }}>+10</button>
-                                <button 
-                                    onClick={() => refetchDaxPrice()} 
+                                <button onClick={() => handleSpotStep(1)} className="px-2 py-1 font-mono hover:opacity-80" style={{ color: textSecondary, borderLeft: `1px solid ${borderColor}`, borderRight: `1px solid ${borderColor}` }}>+1</button>
+                                <button onClick={() => handleSpotStep(10)} className="px-2 py-1 font-mono hover:opacity-80" style={{ color: textSecondary, borderRight: `1px solid ${borderColor}` }}>+10</button>
+                                <button
+                                    onClick={() => refetchDaxPrice()}
                                     disabled={isLoadingSpot}
-                                    className="px-2 py-1 text-accent hover: hover:bg-gray-100 rounded-r-md transition disabled:opacity-50 disabled:cursor-not-allowed" style={{ color: textPrimary }}
+                                    className="px-2 py-1 rounded-r-md transition disabled:opacity-50 disabled:cursor-not-allowed hover:opacity-80" style={{ color: textPrimary }}
                                     title="Aggiorna Prezzo Live (Yahoo Finance)"
                                 >
                                     <div className={isLoadingSpot ? "animate-spin" : ""}>
@@ -476,7 +476,7 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
             </div>
 
             {isBulkEditMode && selectedIds.size > 0 && (
-                <div className="fixed bottom-0 left-0 right-0 border-t p-4 z-40 transition-transform duration-300 ease-in-out" style={{ backgroundColor: bgCard, borderColor: borderColor }}>
+                <div className="fixed bottom-0 left-0 md:left-64 right-0 border-t p-4 z-30 transition-transform duration-300 ease-in-out" style={{ backgroundColor: bgCard, borderColor: borderColor }}>
                     <div className="max-w-4xl mx-auto flex justify-between items-center">
                         <span className="font-semibold " style={{ color: textPrimary }}>{selectedIds.size} {selectedIds.size === 1 ? 'struttura selezionata' : 'strutture selezionate'}</span>
                         <button

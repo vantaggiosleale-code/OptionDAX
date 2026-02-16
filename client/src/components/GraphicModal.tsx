@@ -183,9 +183,9 @@ export function GraphicModal({ isOpen, onClose, structureId, structureTag, isClo
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900">
         <DialogHeader>
-          <DialogTitle className="text-gray-900">Genera Grafica Telegram</DialogTitle>
+          <DialogTitle className="text-gray-900 dark:text-white">Genera Grafica Telegram</DialogTitle>
         </DialogHeader>
 
         {/* Pulsanti tipo grafica - SFONDO BIANCO, BORDO NERO SPESSO, TESTO NERO */}
@@ -197,7 +197,7 @@ export function GraphicModal({ isOpen, onClose, structureId, structureTag, isClo
                 className={`flex-1 px-4 py-3 rounded-lg font-semibold text-base transition-all ${
                   selectedType === 'apertura'
                     ? 'bg-blue-600 text-white border-4 border-blue-700'
-                    : 'bg-white text-gray-900 border-4 border-gray-900 hover:bg-gray-100'
+                    : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-4 border-gray-900 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700'
                 }`}
               >
                 Apertura
@@ -207,7 +207,7 @@ export function GraphicModal({ isOpen, onClose, structureId, structureTag, isClo
                 className={`flex-1 px-4 py-3 rounded-lg font-semibold text-base transition-all ${
                   selectedType === 'aggiustamento'
                     ? 'bg-blue-600 text-white border-4 border-blue-700'
-                    : 'bg-white text-gray-900 border-4 border-gray-900 hover:bg-gray-100'
+                    : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border-4 border-gray-900 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700'
                 }`}
               >
                 Aggiustamento
@@ -226,7 +226,7 @@ export function GraphicModal({ isOpen, onClose, structureId, structureTag, isClo
         </div>
 
         {/* Preview template */}
-        <div className="bg-gray-100 p-4 rounded-lg border-2 border-gray-300">
+        <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg border-2 border-gray-300 dark:border-gray-600">
           <div ref={templateRef} className="inline-block">
             {graphicData && (
               <GraphicTemplate
@@ -258,11 +258,11 @@ export function GraphicModal({ isOpen, onClose, structureId, structureTag, isClo
 
           {generatedImageUrl && (
             <>
-              <Button onClick={handleDownload} variant="outline" className="flex-1 border-2 border-gray-900 text-gray-900 font-semibold hover:bg-gray-100">
+              <Button onClick={handleDownload} variant="outline" className="flex-1 border-2 border-gray-900 dark:border-gray-600 text-gray-900 dark:text-white font-semibold hover:bg-gray-100 dark:hover:bg-gray-700">
                 <Download className="mr-2 h-4 w-4" />
                 Scarica PNG
               </Button>
-              <Button onClick={handleCopyLink} variant="outline" className="flex-1 border-2 border-gray-900 text-gray-900 font-semibold hover:bg-gray-100">
+              <Button onClick={handleCopyLink} variant="outline" className="flex-1 border-2 border-gray-900 dark:border-gray-600 text-gray-900 dark:text-white font-semibold hover:bg-gray-100 dark:hover:bg-gray-700">
                 <Copy className="mr-2 h-4 w-4" />
                 Copia Link
               </Button>
@@ -272,8 +272,8 @@ export function GraphicModal({ isOpen, onClose, structureId, structureTag, isClo
 
         {/* Immagine generata */}
         {generatedImageUrl && (
-          <div className="mt-4 bg-gray-100 p-4 rounded-lg border-2 border-gray-300">
-            <h3 className="text-sm font-semibold mb-2 text-gray-900">Immagine Generata:</h3>
+          <div className="mt-4 bg-gray-100 dark:bg-gray-800 p-4 rounded-lg border-2 border-gray-300 dark:border-gray-600">
+            <h3 className="text-sm font-semibold mb-2 text-gray-900 dark:text-white">Immagine Generata:</h3>
             <img src={generatedImageUrl} alt="Grafica generata" className="w-full rounded border-2 border-gray-400" />
           </div>
         )}

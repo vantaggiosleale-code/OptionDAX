@@ -134,7 +134,7 @@ const ImageAnalysisModal: React.FC<ImageAnalysisModalProps> = ({ isOpen, onClose
     if (!isOpen) return null;
 
     const modalContent = (
-         <div className="fixed inset-0 bg-gray-900 bg-opacity-80 z-50 flex items-center justify-center" onClick={handleClose}>
+         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center" onClick={handleClose}>
             <div className="bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
                 <div className="p-4 border-b border-gray-700 flex justify-between items-center">
                     <h2 className="text-xl font-bold text-white">Carica lo screenshot di un trade</h2>

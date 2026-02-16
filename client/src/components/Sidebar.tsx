@@ -27,7 +27,7 @@ export function Sidebar({ currentView, onNavigate, isOpen = false, isAdmin = fal
 
   return (
     <aside 
-      className={`fixed left-0 top-0 h-screen w-64 border-r flex flex-col z-60 transition-transform duration-300 shadow-lg pt-16 md:pt-0 ${
+      className={`fixed left-0 top-0 h-screen w-64 border-r flex flex-col z-40 transition-transform duration-300 shadow-lg pt-16 md:pt-0 ${
         isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
       }`}
       style={{
@@ -77,7 +77,7 @@ export function Sidebar({ currentView, onNavigate, isOpen = false, isAdmin = fal
               className={`
                 w-full flex items-center gap-3 px-4 py-3 rounded-lg
                 transition-all duration-200 relative
-                ${isActive ? 'bg-blue-50 font-medium' : 'hover:bg-gray-100'}
+                ${isActive ? 'font-medium' : 'hover:opacity-80'}
               `}
               style={{
                 backgroundColor: isActive 

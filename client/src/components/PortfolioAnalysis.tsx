@@ -12,8 +12,8 @@ const CustomEquityTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
         const data = payload[0].payload;
         return (
-            <div className="bg-white p-2 border border-gray-200 rounded-md shadow-lg text-sm">
-                <p className="font-bold text-foreground">{data.tag}</p>
+            <div className="bg-white dark:bg-gray-800 p-2 border border-gray-200 dark:border-gray-600 rounded-md shadow-lg text-sm">
+                <p className="font-bold text-gray-900 dark:text-white">{data.tag}</p>
                 <p className="text-accent">Equity: {data.equity.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' })}</p>
                 <p className="text-loss">Drawdown: {data.drawdown.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' })}</p>
             </div>
@@ -26,8 +26,8 @@ const CustomEquityTooltip = ({ active, payload }: any) => {
 const CustomPnlTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
         return (
-            <div className="bg-white p-2 border border-gray-200 rounded-md shadow-lg text-sm">
-                <p className="font-bold text-foreground">{label}</p>
+            <div className="bg-white dark:bg-gray-800 p-2 border border-gray-200 dark:border-gray-600 rounded-md shadow-lg text-sm">
+                <p className="font-bold text-gray-900 dark:text-white">{label}</p>
                 <p className={payload[0].value >= 0 ? 'text-profit' : 'text-loss'}>
                     P&L Netto: {payload[0].value.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' })}
                 </p>
@@ -38,10 +38,10 @@ const CustomPnlTooltip = ({ active, payload, label }: any) => {
 };
 
 const MetricCard = ({ icon, title, value, colorClass = 'text-foreground' }: { icon: React.ReactNode, title: string, value: string, colorClass?: string }) => (
-    <div className="bg-gray-100 p-4 rounded-lg flex items-start">
-        <div className="p-2 bg-gray-100 rounded-md mr-4 text-muted-foreground">{icon}</div>
+    <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg flex items-start">
+        <div className="p-2 bg-gray-100 dark:bg-gray-700 rounded-md mr-4 text-muted-foreground">{icon}</div>
         <div>
-            <p className="text-sm text-gray-600 font-medium">{title}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">{title}</p>
             <p className={`text-xl font-bold font-mono ${colorClass}`}>{value}</p>
         </div>
     </div>
@@ -139,7 +139,7 @@ const PortfolioAnalysis: React.FC = () => {
     if (!closedStructures || closedStructures.length === 0) {
         return (
              <div className="max-w-4xl mx-auto text-center py-10">
-                <h1 className="text-3xl font-bold text-gray-900 mb-4">Analisi di Portafoglio</h1>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Analisi di Portafoglio</h1>
                 <p className="text-muted-foreground">Nessuna struttura chiusa trovata per generare le analisi.</p>
             </div>
         );
@@ -157,8 +157,8 @@ const PortfolioAnalysis: React.FC = () => {
                 </h1>
             </div>
             <div className="space-y-8">
-                 <div className="bg-white rounded-lg p-4">
-                    <h2 className="text-xl font-bold text-gray-900 mb-4">Metriche Chiave</h2>
+                 <div className="bg-white dark:bg-gray-900 rounded-lg p-4">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Metriche Chiave</h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                         <MetricCard icon={<TrendingUp className="w-5 h-5" />} title="P&L Netto Totale" value={keyMetrics.totalNetPnl.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' })} colorClass={keyMetrics.totalNetPnl >= 0 ? 'text-profit' : 'text-loss'} />
                         <MetricCard icon={<Scale className="w-5 h-5" />} title="Profit Factor" value={isFinite(keyMetrics.profitFactor) ? keyMetrics.profitFactor.toFixed(2) : '∞'} colorClass={keyMetrics.profitFactor >= 1 ? 'text-profit' : 'text-loss'} />
@@ -169,8 +169,8 @@ const PortfolioAnalysis: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="bg-white rounded-lg p-4">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Equity Line & Drawdown</h2>
+                <div className="bg-white dark:bg-gray-900 rounded-lg p-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Equity Line & Drawdown</h2>
                     <ResponsiveContainer width="100%" height={700}>
                         <ComposedChart data={equityChartData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#444444" />
@@ -185,8 +185,8 @@ const PortfolioAnalysis: React.FC = () => {
                     </ResponsiveContainer>
                 </div>
                 
-                <div className="bg-white rounded-lg p-4">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Analisi Temporale (P&L per Mese)</h2>
+                <div className="bg-white dark:bg-gray-900 rounded-lg p-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Analisi Temporale (P&L per Mese)</h2>
                     <ResponsiveContainer width="100%" height={350}>
                             <BarChart data={monthlyPnlData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="#444444" vertical={false} />
@@ -203,8 +203,8 @@ const PortfolioAnalysis: React.FC = () => {
                     </ResponsiveContainer>
                 </div>
 
-                <div className="bg-white rounded-lg p-4">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Distribuzione P&L per Operazione</h2>
+                <div className="bg-white dark:bg-gray-900 rounded-lg p-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Distribuzione P&L per Operazione</h2>
                     <div className="w-full overflow-x-auto">
                         <ResponsiveContainer width={Math.max(individualPnlData.length * barWidth, 400)} height={350}>
                             <BarChart data={individualPnlData} margin={{ top: 5, right: 20, left: 0, bottom: 80 }}>
