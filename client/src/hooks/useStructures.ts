@@ -42,6 +42,9 @@ export function useStructures() {
           impliedVolatility: leg.impliedVolatility,
           openingCommission: leg.openingCommission || 2,
           closingCommission: leg.closingCommission || 2,
+          closingPrice: leg.closingPrice ?? null,
+          closingDate: leg.closingDate ?? null,
+          isActive: leg.isActive ?? true,
         })),
       });
       refetch();
@@ -69,8 +72,9 @@ export function useStructures() {
           impliedVolatility: leg.impliedVolatility,
           openingCommission: leg.openingCommission || 2,
           closingCommission: leg.closingCommission || 2,
-          closingPrice: leg.closingPrice || null,
-          closingDate: leg.closingDate || null,
+          closingPrice: leg.closingPrice ?? null,
+          closingDate: leg.closingDate ?? null,
+          isActive: leg.isActive ?? true,
         })),
       });
       refetch();

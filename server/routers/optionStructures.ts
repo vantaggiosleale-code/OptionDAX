@@ -434,8 +434,8 @@ export const optionStructuresRouter = router({
           spotPrice: input.daxSpot,
           strikePrice: leg.strike,
           timeToExpiry,
-          riskFreeRate: percentToDecimal(input.riskFreeRate),
-          volatility: percentToDecimal(leg.impliedVolatility),
+          riskFreeRate: input.riskFreeRate, // Already in decimal form (0.02 = 2%)
+          volatility: percentToDecimal(leg.impliedVolatility), // IV is stored as percentage (e.g., 18.5)
           optionType: optionTypeLower,
         });
 

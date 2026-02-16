@@ -317,6 +317,7 @@ export async function getApprovalRequestByUserId(userId: number) {
   if (!db) return undefined;
   const result = await db.select()
     .from(approvalRequests)
+    .innerJoin(users, eq(approvalRequests.userId, users.id))
     .where(eq(approvalRequests.userId, userId))
     .limit(1);
   return result[0];

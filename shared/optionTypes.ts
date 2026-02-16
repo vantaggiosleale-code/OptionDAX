@@ -14,7 +14,9 @@ import { z } from 'zod';
  */
 export const optionLegSchema = z.object({
   // Core leg properties
-  optionType: z.enum(['Call', 'Put', 'call', 'put']),
+  optionType: z.enum(['Call', 'Put', 'call', 'put']).transform(v =>
+    (v.charAt(0).toUpperCase() + v.slice(1).toLowerCase()) as 'Call' | 'Put'
+  ),
   strike: z.number().positive('Strike must be positive'),
   expiryDate: z.string().min(1, 'Expiry date is required'), // ISO date string
   quantity: z.number().int('Quantity must be an integer'),

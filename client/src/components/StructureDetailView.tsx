@@ -263,8 +263,9 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
                     impliedVolatility: leg.impliedVolatility,
                     openingCommission: leg.openingCommission || 2,
                     closingCommission: leg.closingCommission || 2,
-                    closingPrice: leg.closingPrice,
-                    closingDate: leg.closingDate,
+                    closingPrice: leg.closingPrice ?? null,
+                    closingDate: leg.closingDate ?? null,
+                    isActive: leg.isActive ?? true,
                 }));
                 
                 await createMutation.mutateAsync({
@@ -321,7 +322,9 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
         const initialGreeks = { delta: 0, gamma: 0, theta: 0, vega: 0 };
         if (!localStructure) return { legGreeks: [], totalGreeks: initialGreeks };
 
-        const openLegs = localStructure.legs.filter(leg => leg.closingPrice === null || leg.closingPrice === undefined);
+        const openLegs = localStructure.legs.filter(leg =>
+            (leg.closingPrice === null || leg.closingPrice === undefined) && leg.isActive !== false
+        );
 
         const riskFreeRate = localStructure.riskFreeRate ? parseFloat(localStructure.riskFreeRate) : 0.02;
         // IMPORTANTE: Usa VI default dalle impostazioni per calcolare Greche in tempo reale
@@ -333,7 +336,7 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
                 spotPrice: marketData.daxSpot,
                 strikePrice: leg.strike,
                 timeToExpiry,
-                riskFreeRate: percentToDecimal(riskFreeRate),
+                riskFreeRate: riskFreeRate, // Already in decimal form (0.02 = 2%)
                 volatility: defaultVolatility, // Usa VI default invece di leg.impliedVolatility
                 optionType: leg.optionType === 'Call' ? 'call' : 'put'
             });
@@ -395,7 +398,7 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
                          spotPrice: marketData.daxSpot,
                          strikePrice: leg.strike,
                          timeToExpiry,
-                         riskFreeRate: percentToDecimal(riskFreeRate),
+                         riskFreeRate: riskFreeRate, // Already in decimal form (0.02 = 2%)
                          volatility: defaultVolatility, // Usa VI default invece di leg.impliedVolatility
                          optionType: leg.optionType === 'Call' ? 'call' : 'put'
                      });
@@ -420,14 +423,17 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
             const commissionCost = openingCommissionCost + closingCommissionCost;
             const netPnlEuro = grossPnlEuro - commissionCost;
 
-            if (isClosed) {
-                totalRealizedGross += grossPnlEuro;
-                totalRealizedCommission += commissionCost;
-                totalRealizedNet += netPnlEuro;
-            } else {
-                totalUnrealizedGross += grossPnlEuro;
-                totalUnrealizedCommission += commissionCost;
-                totalUnrealizedNet += netPnlEuro;
+            // Only count active legs in totals (inactive legs are shown but don't contribute)
+            if (leg.isActive !== false) {
+                if (isClosed) {
+                    totalRealizedGross += grossPnlEuro;
+                    totalRealizedCommission += commissionCost;
+                    totalRealizedNet += netPnlEuro;
+                } else {
+                    totalUnrealizedGross += grossPnlEuro;
+                    totalUnrealizedCommission += commissionCost;
+                    totalUnrealizedNet += netPnlEuro;
+                }
             }
             
             return {
@@ -477,7 +483,7 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
             spotPrice: marketData.daxSpot,
             strikePrice: leg.strike,
             timeToExpiry,
-            riskFreeRate: percentToDecimal(riskFreeRate),
+            riskFreeRate: riskFreeRate, // Already in decimal form (0.02 = 2%)
             volatility: defaultVolatility, // Usa VI default invece di leg.impliedVolatility
             optionType: leg.optionType === 'Call' ? 'call' : 'put'
         });
@@ -848,7 +854,13 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
                 </div>
                 <div className="lg:col-span-2 bg-gray-800 rounded-lg p-4 flex flex-col space-y-4">
                     <div className="flex-grow h-[500px] pointer-events-none">
-                        <PayoffChart legs={localStructure.legs} marketData={marketData} multiplier={localStructure.multiplier} />
+                        <PayoffChart
+                            legs={localStructure.legs}
+                            marketData={marketData}
+                            multiplier={localStructure.multiplier}
+                            defaultVolatility={userSettings?.defaultVolatility ? parseFloat(userSettings.defaultVolatility) : undefined}
+                            defaultRiskFreeRate={localStructure.riskFreeRate ? parseFloat(localStructure.riskFreeRate) : undefined}
+                        />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="overflow-x-auto">

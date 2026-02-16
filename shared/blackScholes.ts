@@ -11,8 +11,8 @@
 // CONSTANTS
 // ============================================================================
 
-/** Days in a year */
-export const DAYS_PER_YEAR = 365;
+/** Days in a year (accounts for leap years) */
+export const DAYS_PER_YEAR = 365.25;
 
 /** Minimum time to expiry to avoid division by zero */
 export const MIN_TIME_TO_EXPIRY = 0.000001;

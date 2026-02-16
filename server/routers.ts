@@ -5,7 +5,7 @@ import { publicProcedure, router } from "./_core/trpc";
 import { strategiesRouter } from "./routers/strategies";
 import { portfoliosRouter } from "./routers/portfolios";
 import { analysisRouter } from "./routers/analysis";
-import { chatRouter } from "./routers/chat";
+
 import { filesRouter } from "./routers/files";
 import { alertsRouter } from "./routers/alerts";
 import { optionStructuresRouter } from "./routers/optionStructures";
@@ -31,7 +31,6 @@ export const appRouter = router({
   strategies: strategiesRouter,
   portfolios: portfoliosRouter,
   analysis: analysisRouter,
-  chat: chatRouter,
   files: filesRouter,
   alerts: alertsRouter,
   optionStructures: optionStructuresRouter,

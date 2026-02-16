@@ -8,6 +8,8 @@ interface PayoffChartProps {
   legs: OptionLeg[];
   marketData: MarketData;
   multiplier: number;
+  defaultVolatility?: number;  // From DB user settings, in decimal form (e.g., 0.18 = 18%)
+  defaultRiskFreeRate?: number; // From DB user settings, in decimal form (e.g., 0.02 = 2%)
 }
 
 const Diamond = (props: any) => {
@@ -53,7 +55,7 @@ const getChartColors = (isDark: boolean) => ({
     tooltipText: isDark ? '#f3f4f6' : '#111827',
 });
 
-const PayoffChart: React.FC<PayoffChartProps> = ({ legs, marketData, multiplier }) => {
+const PayoffChart: React.FC<PayoffChartProps> = ({ legs, marketData, multiplier, defaultVolatility, defaultRiskFreeRate }) => {
     const { theme } = useTheme();
     const isDark = theme === 'dark';
     const colors = getChartColors(isDark);
@@ -113,7 +115,7 @@ const PayoffChart: React.FC<PayoffChartProps> = ({ legs, marketData, multiplier 
                     pnlPoints = (leg.tradePrice - leg.closingPrice!) * Math.abs(leg.quantity);
                 }
                 const grossPnl = pnlPoints * multiplier;
-                const commissions = 4 * Math.abs(leg.quantity);
+                const commissions = ((leg.openingCommission ?? 2) + (leg.closingCommission ?? 2)) * Math.abs(leg.quantity);
                 realizedPnlOffset += (grossPnl - commissions);
                 return;
             }
@@ -134,8 +136,8 @@ const PayoffChart: React.FC<PayoffChartProps> = ({ legs, marketData, multiplier 
                     spotPrice: currentSpot,
                     strikePrice: leg.strike,
                     timeToExpiry,
-                    riskFreeRate: percentToDecimal(marketData.riskFreeRate),
-                    volatility: percentToDecimal(leg.impliedVolatility),
+                    riskFreeRate: defaultRiskFreeRate ?? percentToDecimal(marketData.riskFreeRate),
+                    volatility: defaultVolatility ?? percentToDecimal(leg.impliedVolatility),
                     optionType: leg.optionType === 'Call' ? 'call' : 'put'
                 });
                 const currentPrice = bsResult.optionPrice;
@@ -181,7 +183,7 @@ const PayoffChart: React.FC<PayoffChartProps> = ({ legs, marketData, multiplier 
                     pnlPoints = (leg.tradePrice - leg.closingPrice!) * Math.abs(leg.quantity);
                 }
                 const grossPnl = pnlPoints * multiplier;
-                const commissions = 4 * Math.abs(leg.quantity);
+                const commissions = ((leg.openingCommission ?? 2) + (leg.closingCommission ?? 2)) * Math.abs(leg.quantity);
                 realizedPnlOffset += (grossPnl - commissions);
             }
         });
@@ -213,8 +215,8 @@ const PayoffChart: React.FC<PayoffChartProps> = ({ legs, marketData, multiplier 
                     spotPrice: currentSpot,
                     strikePrice: leg.strike,
                     timeToExpiry,
-                    riskFreeRate: percentToDecimal(marketData.riskFreeRate),
-                    volatility: percentToDecimal(leg.impliedVolatility),
+                    riskFreeRate: defaultRiskFreeRate ?? percentToDecimal(marketData.riskFreeRate),
+                    volatility: defaultVolatility ?? percentToDecimal(leg.impliedVolatility),
                     optionType: leg.optionType === 'Call' ? 'call' : 'put'
                 });
                 const currentPrice = bsResult.optionPrice;

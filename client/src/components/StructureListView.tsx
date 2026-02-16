@@ -14,23 +14,25 @@ import { useTheme } from '../contexts/ThemeContext';
 
 // This function now calculates all Greeks in their "points" or standard format.
 // Monetization is handled separately in the component's render method.
-const calculateTotalGreeks = (structure: Structure, marketData: MarketData, settings: Settings): CalculatedGreeks => {
+const calculateTotalGreeks = (structure: Structure, marketData: MarketData, settings: Settings, dbDefaultVolatility?: number, dbDefaultRiskFreeRate?: number): CalculatedGreeks => {
     const initialGreeks = { delta: 0, gamma: 0, theta: 0, vega: 0 };
     if (!structure.legs || structure.legs.length === 0) return initialGreeks;
 
     // Filter only active legs (isActive !== false)
     const activeLegs = structure.legs.filter(leg => leg.isActive !== false);
 
+    // Use DB settings if available, otherwise fallback
+    const volatility = dbDefaultVolatility ?? 0.18;
+    const riskFreeRate = dbDefaultRiskFreeRate ?? 0.02;
+
     return activeLegs.reduce((acc, leg) => {
         const timeToExpiry = getTimeToExpiry(leg.expiryDate);
-        // IMPORTANTE: Usa VI default dalle impostazioni per calcolare Greche in tempo reale
-        const defaultVolatility = settings.defaultVolatility ? parseFloat(settings.defaultVolatility) : 0.18;
         const bsResult = calculateBlackScholes({
             spotPrice: marketData.daxSpot,
             strikePrice: leg.strike,
             timeToExpiry,
-            riskFreeRate: percentToDecimal(marketData.riskFreeRate),
-            volatility: defaultVolatility, // Usa VI default invece di leg.impliedVolatility
+            riskFreeRate: riskFreeRate, // Already in decimal form (0.02 = 2%)
+            volatility: volatility, // Default IV from DB settings
             optionType: leg.optionType === 'Call' ? 'call' : 'put'
         });
         const greeks = { delta: bsResult.delta, gamma: bsResult.gamma, theta: bsResult.theta, vega: bsResult.vega };
@@ -58,7 +60,7 @@ const calculateNetPremium = (structure: Structure): number => {
     return totalPremium;
 };
 
-const calculateUnrealizedPnlForStructure = (structure: Structure, marketData: MarketData, settings: Settings): number => {
+const calculateUnrealizedPnlForStructure = (structure: Structure, marketData: MarketData, settings: Settings, dbDefaultVolatility?: number, dbDefaultRiskFreeRate?: number): number => {
     if (structure.status !== 'active') {
         return 0;
     }
@@ -66,10 +68,14 @@ const calculateUnrealizedPnlForStructure = (structure: Structure, marketData: Ma
     // Filter only active legs (isActive !== false)
     const activeLegs = structure.legs.filter(leg => leg.isActive !== false);
 
+    // Use DB settings if available, otherwise fallback
+    const volatility = dbDefaultVolatility ?? 0.18;
+    const riskFreeRate = dbDefaultRiskFreeRate ?? 0.02;
+
     const totalNetPnl = activeLegs.reduce((acc, leg) => {
         // Check if leg has manual closing price
         const hasManualClosingPrice = leg.closingPrice !== null && leg.closingPrice !== undefined;
-        
+
         let currentPrice = 0;
         if (hasManualClosingPrice) {
             // Use manual closing price if present
@@ -78,15 +84,12 @@ const calculateUnrealizedPnlForStructure = (structure: Structure, marketData: Ma
             // Calculate theoretical price with Black-Scholes
             const timeToExpiry = getTimeToExpiry(leg.expiryDate);
             if (timeToExpiry > 0) {
-                // IMPORTANTE: Usa VI default dalle impostazioni per calcolare P&L in tempo reale
-                // NON usare leg.impliedVolatility (che è calcolata dal prezzo reale) per evitare valori statici
-                const defaultVolatility = settings.defaultVolatility ? parseFloat(settings.defaultVolatility) : 0.18;
                 const bsResult = calculateBlackScholes({
                     spotPrice: marketData.daxSpot,
                     strikePrice: leg.strike,
                     timeToExpiry,
-                    riskFreeRate: percentToDecimal(marketData.riskFreeRate),
-                    volatility: defaultVolatility, // Usa VI default invece di leg.impliedVolatility
+                    riskFreeRate: riskFreeRate, // Already in decimal form (0.02 = 2%)
+                    volatility: volatility, // Default IV from DB settings
                     optionType: leg.optionType === 'Call' ? 'call' : 'put'
                 });
                 currentPrice = bsResult.optionPrice;
@@ -133,7 +136,12 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
     
     const { structures, deleteStructures, isLoading } = useStructures();
     const { settings } = useSettingsStore();
-    
+
+    // DB user settings for default volatility and risk-free rate
+    const { data: userSettings } = trpc.userSettings.get.useQuery();
+    const dbDefaultVolatility = userSettings?.defaultVolatility ? parseFloat(userSettings.defaultVolatility) : undefined;
+    const dbDefaultRiskFreeRate = userSettings?.defaultRiskFreeRate ? parseFloat(userSettings.defaultRiskFreeRate) : undefined;
+
     // Market data gestito con store globale Zustand
     const { marketData, setMarketData } = useMarketDataStore();
     
@@ -165,7 +173,7 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
         }
 
         return activeStructures.reduce((acc, structure) => {
-            const structureGreeks = calculateTotalGreeks(structure, marketData, settings);
+            const structureGreeks = calculateTotalGreeks(structure, marketData, settings, dbDefaultVolatility, dbDefaultRiskFreeRate);
             acc.delta += structureGreeks.delta;
             acc.gamma += structureGreeks.gamma;
             acc.theta += structureGreeks.theta * structure.multiplier; // Monetize here
@@ -173,13 +181,13 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
             return acc;
         }, initialGreeks);
 
-    }, [activeStructures, marketData]);
-    
+    }, [activeStructures, marketData, dbDefaultVolatility, dbDefaultRiskFreeRate]);
+
     const totalPortfolioUnrealizedPnl = useMemo(() => {
         return activeStructures.reduce((acc, structure) => {
-            return acc + calculateUnrealizedPnlForStructure(structure, marketData, settings);
+            return acc + calculateUnrealizedPnlForStructure(structure, marketData, settings, dbDefaultVolatility, dbDefaultRiskFreeRate);
         }, 0);
-    }, [activeStructures, marketData, settings]);
+    }, [activeStructures, marketData, settings, dbDefaultVolatility, dbDefaultRiskFreeRate]);
 
     const handleSelect = useCallback((id: number) => {
         setSelectedIds(prev => {
@@ -303,9 +311,9 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
                     <div className="space-y-3">
                         {activeStructures.length > 0 ? (
                             activeStructures.map(structure => {
-                                const totalGreeks = calculateTotalGreeks(structure, marketData, settings);
+                                const totalGreeks = calculateTotalGreeks(structure, marketData, settings, dbDefaultVolatility, dbDefaultRiskFreeRate);
                                 const netPremium = calculateNetPremium(structure);
-                                const unrealizedPnl = calculateUnrealizedPnlForStructure(structure, marketData, settings);
+                                const unrealizedPnl = calculateUnrealizedPnlForStructure(structure, marketData, settings, dbDefaultVolatility, dbDefaultRiskFreeRate);
                                 return (
                                     <div 
                                         key={structure.id} 
