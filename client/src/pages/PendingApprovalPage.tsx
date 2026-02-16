@@ -3,16 +3,16 @@ import { Clock, Mail, RefreshCw } from 'lucide-react';
 import { useAuth } from '../_core/hooks/useAuth';
 
 export const PendingApprovalPage: React.FC = () => {
-    const { user, refetch } = useAuth();
+    const { user, refresh } = useAuth();
 
     // Auto-refresh ogni 10 secondi per verificare se l'account è stato approvato
     useEffect(() => {
         const interval = setInterval(() => {
-            refetch();
+            refresh();
         }, 10000); // 10 secondi
 
         return () => clearInterval(interval);
-    }, [refetch]);
+    }, [refresh]);
 
     // Se l'utente è stato approvato, ricarica la pagina per accedere alla dashboard
     useEffect(() => {

@@ -8,7 +8,7 @@ export function LandingPage() {
   const handleGoogleLogin = () => {
     if (disclamerAccepted) {
       // Redirect to Google OAuth login (Google only)
-      window.location.href = getLoginUrl('google');
+      window.location.href = getLoginUrl();
     }
   };
 
