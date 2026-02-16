@@ -14,7 +14,7 @@ import { useTheme } from '../contexts/ThemeContext';
 
 // This function now calculates all Greeks in their "points" or standard format.
 // Monetization is handled separately in the component's render method.
-const calculateTotalGreeks = (structure: Structure, marketData: MarketData): CalculatedGreeks => {
+const calculateTotalGreeks = (structure: Structure, marketData: MarketData, settings: Settings): CalculatedGreeks => {
     const initialGreeks = { delta: 0, gamma: 0, theta: 0, vega: 0 };
     if (!structure.legs || structure.legs.length === 0) return initialGreeks;
 
@@ -23,12 +23,14 @@ const calculateTotalGreeks = (structure: Structure, marketData: MarketData): Cal
 
     return activeLegs.reduce((acc, leg) => {
         const timeToExpiry = getTimeToExpiry(leg.expiryDate);
+        // IMPORTANTE: Usa VI default dalle impostazioni per calcolare Greche in tempo reale
+        const defaultVolatility = settings.defaultVolatility ? parseFloat(settings.defaultVolatility) : 0.18;
         const bsResult = calculateBlackScholes({
             spotPrice: marketData.daxSpot,
             strikePrice: leg.strike,
             timeToExpiry,
             riskFreeRate: percentToDecimal(marketData.riskFreeRate),
-            volatility: percentToDecimal(leg.impliedVolatility),
+            volatility: defaultVolatility, // Usa VI default invece di leg.impliedVolatility
             optionType: leg.optionType === 'Call' ? 'call' : 'put'
         });
         const greeks = { delta: bsResult.delta, gamma: bsResult.gamma, theta: bsResult.theta, vega: bsResult.vega };
@@ -76,12 +78,15 @@ const calculateUnrealizedPnlForStructure = (structure: Structure, marketData: Ma
             // Calculate theoretical price with Black-Scholes
             const timeToExpiry = getTimeToExpiry(leg.expiryDate);
             if (timeToExpiry > 0) {
+                // IMPORTANTE: Usa VI default dalle impostazioni per calcolare P&L in tempo reale
+                // NON usare leg.impliedVolatility (che è calcolata dal prezzo reale) per evitare valori statici
+                const defaultVolatility = settings.defaultVolatility ? parseFloat(settings.defaultVolatility) : 0.18;
                 const bsResult = calculateBlackScholes({
                     spotPrice: marketData.daxSpot,
                     strikePrice: leg.strike,
                     timeToExpiry,
                     riskFreeRate: percentToDecimal(marketData.riskFreeRate),
-                    volatility: percentToDecimal(leg.impliedVolatility),
+                    volatility: defaultVolatility, // Usa VI default invece di leg.impliedVolatility
                     optionType: leg.optionType === 'Call' ? 'call' : 'put'
                 });
                 currentPrice = bsResult.optionPrice;
@@ -160,7 +165,7 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
         }
 
         return activeStructures.reduce((acc, structure) => {
-            const structureGreeks = calculateTotalGreeks(structure, marketData);
+            const structureGreeks = calculateTotalGreeks(structure, marketData, settings);
             acc.delta += structureGreeks.delta;
             acc.gamma += structureGreeks.gamma;
             acc.theta += structureGreeks.theta * structure.multiplier; // Monetize here
@@ -298,7 +303,7 @@ const StructureListView: React.FC<StructureListViewProps> = ({ setCurrentView })
                     <div className="space-y-3">
                         {activeStructures.length > 0 ? (
                             activeStructures.map(structure => {
-                                const totalGreeks = calculateTotalGreeks(structure, marketData);
+                                const totalGreeks = calculateTotalGreeks(structure, marketData, settings);
                                 const netPremium = calculateNetPremium(structure);
                                 const unrealizedPnl = calculateUnrealizedPnlForStructure(structure, marketData, settings);
                                 return (

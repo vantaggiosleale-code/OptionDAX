@@ -1020,3 +1020,11 @@
 - [x] Soluzione: Usare rgb(255, 255, 255) per light e rgb(17, 24, 39) per dark con opacity: 1
 - [x] Risultato: Sidebar completamente opaca in entrambi i temi, testo perfettamente leggibile
 - [x] Test: Verificato su desktop light mode - sidebar bianca opaca, nessuna trasparenza
+
+## 🔴 BUG CRITICO: Discrepanza P/L Dashboard vs Dettaglio Struttura (RISOLTO)
+- [x] Problema: Dashboard mostrava P/L Aperto €2.20 per struttura 2DC02, ma dettaglio mostrava €-321.45
+- [x] Differenza: ~€323 di scostamento (enorme!)
+- [x] Causa: calculateUnrealizedPnlForStructure e calculateTotalGreeks usavano leg.impliedVolatility invece di VI default
+- [x] Soluzione: Modificato per usare settings.defaultVolatility in entrambe le funzioni (StructureListView.tsx righe 81, 27)
+- [x] Risultato: Dashboard ora mostra valori realistici (es. 2DD01: €-4569.20, BB: €-2018.30)
+- [ ] Test: Verificare che Dashboard e dettaglio mostrino esattamente lo stesso valore per ogni struttura
