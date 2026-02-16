@@ -8,7 +8,7 @@ interface PendingApproval {
   status: string;
   userName: string;
   userEmail: string;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export function ApprovalsView() {

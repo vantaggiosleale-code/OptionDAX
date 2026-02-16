@@ -60,6 +60,7 @@ export const createStructureSchema = z.object({
   tag: z.string().min(1, 'Tag is required').max(100, 'Tag too long'),
   multiplier: z.number().int().positive().default(5),
   legsPerContract: z.number().int().positive().default(2),
+  riskFreeRate: z.string().default('0.02'), // Risk-free rate for Black-Scholes (e.g., "0.02" = 2%)
   legs: optionLegsArraySchema,
   status: z.enum(['active', 'closed']).default('active'),
   openPnl: z.string().optional(),
@@ -85,6 +86,7 @@ export const updateStructureSchema = z.object({
   tag: z.string().min(1).max(100).optional(),
   multiplier: z.number().int().positive().optional(),
   legsPerContract: z.number().int().positive().optional(),
+  riskFreeRate: z.string().optional(), // Risk-free rate for Black-Scholes
   legs: optionLegsArraySchema.optional(),
   status: z.enum(['active', 'closed']).optional(),
   openPnl: z.string().optional(),

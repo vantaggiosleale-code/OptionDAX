@@ -109,7 +109,7 @@ const StructureDetailView: React.FC<StructureDetailViewProps> = ({ structureId, 
         });
     };
     
-    const handleLegChange = (id: number, field: keyof Omit<OptionLeg, 'id'>, value: string | number | null) => {
+    const handleLegChange = (id: number, field: keyof Omit<OptionLeg, 'id'>, value: string | number | boolean | null) => {
         if (!localStructure || isReadOnly) return;
         
         // Create deep copy of legs array to ensure React detects the change

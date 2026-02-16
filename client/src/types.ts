@@ -25,6 +25,7 @@ export interface Structure {
     legs: OptionLeg[];
     status: 'active' | 'closed';
     multiplier: number; // Product multiplier (e.g., 1=CFD, 5=Micro Future, 25=Future)
+    riskFreeRate?: string; // Risk-free rate for Black-Scholes (e.g., "0.02" = 2%)
     closingDate?: string;
     realizedPnl?: number;
     isPublic?: number; // 0 = private, 1 = public
